@@ -1,0 +1,26 @@
+import logging
+import azure.functions as func
+import boto3
+import botocore
+import json
+from botocore.exceptions import ClientError
+
+SECURITY-LAKE-AZURE-STREAM-ARN = ""
+
+def main(event: func.EventHubEvent):
+
+
+    kinesis_client = boto3.client('kinesis')
+
+    for i in event:
+        event_data_raw = i.get_body().decode('utf-8')
+
+        for record in json.loads(event_data_raw)["records"]:
+            logging.info(record)
+            logging.info(type(record))
+
+            response = kinesis_client.put_record(StreamName=SECURITY-LAKE-AZURE-STREAM-ARN, 
+            Data=json.dumps(record), 
+            PartitionKey="time"
+)
+

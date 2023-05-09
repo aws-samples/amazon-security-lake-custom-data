@@ -1,0 +1,213 @@
+{
+	"Description": "Amazon Security Lake Azure Glue Job",
+	"Resources": {
+		"securityLakeGlueStreamingRole": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"RoleName": "securityLakeGlueStreamingRole",
+				"AssumeRolePolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": {
+								"Service": [
+									"glue.amazonaws.com"
+								]
+							},
+							"Action": [
+								"sts:AssumeRole"
+							]
+						}
+					]
+				},
+				"ManagedPolicyArns": [
+					"arn:aws:iam::aws:policy/service-role/AWSLambdaKinesisExecutionRole",
+					"arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+				],
+				"Policies": [
+					{
+						"PolicyName": "securityLakeGlueStreamingPolicy",
+						"PolicyDocument": {
+							"Version": "2012-10-17",
+							"Statement": [
+								{
+									"Effect": "Allow",
+									"Action": [
+										"s3:GetObject",
+										"s3:PutObject"
+									],
+									"Resource": [
+										"arn:aws:s3:::aws-security-data-lake-*/*"
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		"MyJob": {
+			"Type": "AWS::Glue::Job",
+			"Properties": {
+				"Command": {
+					"Name": "securityLakeAzureActivityJob",
+					"ScriptLocation": {
+						"Fn::Join": [
+							"s3://",
+							[
+								"securitylake-glue-assets-",
+								{
+									"Ref": "AWS::AccountId"
+								},
+								"-",
+								{
+									"Ref": "AWS::Region"
+								},
+								"//azure-activity-pyspark.py"
+							]
+						]
+					}
+				},
+				"DefaultArguments": {
+					"--job-bookmark-option": "job-bookmark-enable"
+				},
+				"ExecutionProperty": {
+					"MaxConcurrentRuns": 2
+				},
+				"MaxRetries": 0,
+				"Name": {
+					"Fn::Join": [
+						"",
+						[
+							"securityLake-azure-activity-job-",
+							{
+								"Ref": "AWS::AccountId"
+							},
+							"-",
+							{
+								"Ref": "AWS::Region"
+							}
+						]
+					]
+				},
+				"Role": {
+					"Ref": "securityLakeGlueStreamingRole"
+				},
+				"NumberOfWorkers": "2",
+				"GlueVersion": "3.0",
+				"WorkerType": "G.1X"
+			}
+		},
+		"MyS3Bucket": {
+			"Type": "AWS::S3::Bucket",
+			"DeletionPolicy": "Delete",
+			"Properties": {
+				"BucketName": {
+					"Fn::Join": [
+						"",
+						[
+							"securitylake-glue-assets-",
+							{
+								"Ref": "AWS::AccountId"
+							},
+							"-",
+							{
+								"Ref": "AWS::Region"
+							}
+						]
+					]
+				},
+				"BucketEncryption": {
+					"ServerSideEncryptionConfiguration": [
+						{
+							"ServerSideEncryptionByDefault": {
+								"SSEAlgorithm": "AES256"
+							}
+						}
+					]
+				},
+				"VersioningConfiguration": {
+					"Status": "Enabled"
+				},
+				"PublicAccessBlockConfiguration": {
+					"BlockPublicAcls": true,
+					"BlockPublicPolicy": true,
+					"IgnorePublicAcls": true,
+					"RestrictPublicBuckets": true
+				}
+			}
+		},
+		"MyS3BucketPolicy": {
+			"Type": "AWS::S3::BucketPolicy",
+			"Properties": {
+				"Bucket": {
+					"Ref": "MyS3Bucket"
+				},
+				"PolicyDocument": {
+					"Statement": [
+						{
+							"Sid": "Stmt1683139153218",
+							"Action": [
+								"s3:GetObject",
+								"s3:PutObject"
+							],
+							"Effect": "Allow",
+							"Resource": {
+								"Fn::Join": [
+									"",
+									[
+										"arn:aws:s3:::securitylake-glue-assets-",
+										{
+											"Ref": "AWS::AccountId"
+										},
+										"-",
+										{
+											"Ref": "AWS::Region"
+										},
+										"/*"
+									]
+								]
+							},
+							"Condition": {
+								"Bool": {
+									"aws:SecureTransport": "true"
+								},
+								"ArnEquals": {
+									"aws:PrincipalArn": {
+										"Fn::Join": [
+											"",
+											[
+												"arn:aws:iam::",
+												{
+													"Ref": "AWS::AccountId"
+												},
+												":role/securityLakeGlueStreamingRole"
+											]
+										]
+									}
+								}
+							},
+							"Principal": "*"
+						}
+					]
+				}
+			}
+		},
+		"securityLakeAzureActivityStream": {
+			"Type": "AWS::Kinesis::Stream",
+			"Properties": {
+				"Name": "securityLakeAzureActivityStream",
+				"RetentionPeriodHours": 168,
+				"ShardCount": 3,
+				"StreamEncryption": {
+					"EncryptionType": "KMS",
+					"KeyId": "alias/aws/kinesis"
+				},
+				"StreamModeDetails": {
+					"StreamMode": "PROVISIONED"
+				}
+			}
+		}
+	}
+}
