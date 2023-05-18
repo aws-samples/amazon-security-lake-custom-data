@@ -6,11 +6,19 @@ import json
 from botocore.exceptions import ClientError
 
 SECURITY-LAKE-AZURE-STREAM-ARN = ""
+SECURITY-LAKE-AZURE-STREAM-NAME = ""
+SECURITY-LAKE-AZURE-KEY-ID = ""
 
 def main(event: func.EventHubEvent):
 
-
     kinesis_client = boto3.client('kinesis')
+    
+    response = kinesis_client.start_stream_encryption(
+        StreamName=SECURITY-LAKE-AZURE-STREAM-NAME,
+        EncryptionType='KMS',
+        KeyId=SECURITY-LAKE-AZURE-KEY-ID,
+        StreamARN=SECURITY-LAKE-AZURE-STREAM-ARN
+    )
 
     for i in event:
         event_data_raw = i.get_body().decode('utf-8')
