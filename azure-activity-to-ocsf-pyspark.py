@@ -64,11 +64,29 @@ def processBatch(data_frame, batchId):
         ApplyMapping_node2.printSchema()
         ApplyMapping_node2.show(5)
         
+        if category == "Write"
+            ACTIVITYNAME = "Create"
+            ACTIVITYID = 1
+            TYPENAME = "API Acitvity: API Activity: Create"
+            TYPEUID = 300501
+            
+        if category == "Delete"
+            ACTIVITYNAME = "Create"
+            ACTIVITYID = 4
+            TYPENAME = "API Acitvity: API Activity: Delete"
+            TYPEUID = 300504
+            
+        if category == "Action"
+            ACTIVITYNAME = "Update"
+            ACTIVITYID = 3
+            TYPENAME = "API Acitvity: API Activity: Update"
+            TYPEUID = 300503
+        
         #add OCSF base fields
-        azureAuditLog_df = ApplyMapping_node2.toDF().withColumn("activity_id",lit("0"))\
-                                                             .withColumn("activity_name", lit("Unknown"))\
-                                                             .withColumn("type_name", lit("API Activity: Unknown"))\
-                                                             .withColumn("type_uid", lit("300500"))\
+        azureAuditLog_df = ApplyMapping_node2.toDF().withColumn("activity_id",lit(ACTIVITYID))\
+                                                             .withColumn("activity_name", lit(ACTIVITYNAME))\
+                                                             .withColumn("type_name", lit(TYPENAME))\
+                                                             .withColumn("type_uid", lit(TYPEUID))\
                                                              .withColumn("category_name", lit("Audit Activity"))\
                                                              .withColumn("category_uid", lit("3"))\
                                                              .withColumn("class_name", lit("API Activity"))\
