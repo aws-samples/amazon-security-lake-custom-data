@@ -51,7 +51,7 @@ def processBatch(data_frame, batchId):
                  ("identity.authorization.scope", "string", "resources.details", "string"), 
                  ("caller", "string", "identity.user.uid", "string"), 
                  ("identity.claims.ipaddr", "string", "src_endpoint.ip", "string"),
-                 ("identity.claims.name", "string", "identity.user.name", "string"),
+                 ("identity.claims.name", "string", "actor.user.name", "string"),
                  ("time", "string", "time", "string"), 
                  ("level", "string", "severity", "string"), 
                  ("identity.claims.groups", "string", "resources.group_name", "string"),
@@ -66,7 +66,9 @@ def processBatch(data_frame, batchId):
         
         #add OCSF base fields
         azureAuditLog_df = ApplyMapping_node2.toDF().withColumn("activity_id",lit("3"))\
-                                                             .withColumn("activity_name", lit("Operational"))\
+                                                             .withColumn("activity_name", lit("Unknown"))\
+                                                             .withColumn("type_name", lit("API Activity: Unknown"))\
+                                                             .withColumn("type_uid", lit("300500"))\
                                                              .withColumn("category_name", lit("Audit Activity"))\
                                                              .withColumn("category_uid", lit("3"))\
                                                              .withColumn("class_name", lit("API Activity"))\
