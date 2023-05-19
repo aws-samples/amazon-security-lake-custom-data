@@ -103,12 +103,6 @@ def processBatch(data_frame, batchId):
                 return '300504'
             if source == 'Action':
                 return '300503'
-        
-        
-        #azureAuditLog_df["ACTIVITYNAME"] = azureAuditLog_df["category"].map(mapper_AN)
-        #azureAuditLog_df["ACTIVITYID"] = azureAuditLog_df["category"].map(EQ_ACTIVITYID)
-        #azureAuditLog_df["TYPENAME"] = azureAuditLog_df["category"].map(EQ_TYPENAME)
-        #azureAuditLog_df["TYPEUID"] = azureAuditLog_df["category"].map(EQ_TYPEUID)
                                                              
         azureAuditLog_df = azureAuditLog_df.withColumn("category_name", lit("Audit Activity"))\
                                                              .withColumn("category_uid", lit("3"))\
