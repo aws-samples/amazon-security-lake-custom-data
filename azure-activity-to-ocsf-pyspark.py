@@ -82,7 +82,6 @@ def processBatch(data_frame, batchId):
         year = now.year
         month = now.month
         day = now.day
-        hour = now.hour
         region = AWS_REGION_NAME
         account_id = AWS_ACCOUNT_ID
 
@@ -92,13 +91,12 @@ def processBatch(data_frame, batchId):
             DATA_LAKE_NAME+"/ext/AZURE-ACTIVITY"
             + "/region=" 
             + region 
-            + "/account_id=" 
+            + "/accountid=" 
             + account_id 
-            + "/eventHour="
+            + "/eventDay="
             + "{:0>4}".format(str(year))
             + "{:0>2}".format(str(month))
             + "{:0>2}".format(str(day))
-            + "{:0>2}".format(str(hour))
             + "/"
         )
         S3bucket_node3 = glueContext.write_dynamic_frame.from_options(
