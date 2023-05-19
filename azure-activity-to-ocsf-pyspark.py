@@ -65,7 +65,7 @@ def processBatch(data_frame, batchId):
         ApplyMapping_node2.show(5)
         
         #add OCSF base fields
-        azureAuditLog_df = ApplyMapping_node2.toDF().withColumn("activity_id",lit("3"))\
+        azureAuditLog_df = ApplyMapping_node2.toDF().withColumn("activity_id",lit("0"))\
                                                              .withColumn("activity_name", lit("Unknown"))\
                                                              .withColumn("type_name", lit("API Activity: Unknown"))\
                                                              .withColumn("type_uid", lit("300500"))\
