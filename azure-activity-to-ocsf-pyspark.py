@@ -92,11 +92,10 @@ def processBatch(data_frame, batchId):
             + region 
             + "/account_id=" 
             + account_id 
-            + "/eventHour="
+            + "/eventDay="
             + "{:0>4}".format(str(year))
             + "{:0>2}".format(str(month))
             + "{:0>2}".format(str(day))
-            + "{:0>2}".format(str(hour))
             + "/"
         )
         S3bucket_node3 = glueContext.write_dynamic_frame.from_options(
