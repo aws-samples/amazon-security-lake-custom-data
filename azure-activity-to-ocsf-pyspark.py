@@ -144,7 +144,7 @@ def processBatch(data_frame, batchId):
              "s3://"+SECURITY_LAKE_BUCKET_NAME+"/ext/AZURE-ACTIVITY"
             + "/region=" 
             + region 
-            + "/account_id=" 
+            + "/accountid=" 
             + account_id 
             + "/eventDay="
             + "{:0>4}".format(str(year))
