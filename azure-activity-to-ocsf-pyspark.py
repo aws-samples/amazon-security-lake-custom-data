@@ -49,7 +49,7 @@ def processBatch(data_frame, batchId):
             mappings=[
                  ("operationName", "string", "api.operation", "string"), 
                  ("identity.authorization.scope", "string", "resources.details", "string"), 
-                 ("caller", "string", "identity.user.uid", "string"), 
+                 ("caller", "string", "actor.user.uid", "string"), 
                  ("identity.claims.ipaddr", "string", "src_endpoint.ip", "string"),
                  ("identity.claims.name", "string", "actor.user.name", "string"),
                  ("time", "string", "time", "string"), 
