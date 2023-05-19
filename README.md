@@ -1,4 +1,4 @@
-## My Project
+# My Project
 
 Pending Blog Release
 
@@ -26,7 +26,7 @@ Pending Blog Release
             class_name --> "API Activity"
             class_uid" --> 3005
 
-## Security
+# Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
 
