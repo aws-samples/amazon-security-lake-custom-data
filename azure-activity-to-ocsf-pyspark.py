@@ -37,7 +37,6 @@ dataframe_KinesisStream_node1 = glueContext.create_data_frame.from_options(
     transformation_ctx="dataframe_KinesisStream_node1",
 )
 
-
 def processBatch(data_frame, batchId):
     if data_frame.count() > 0:
         KinesisStream_node1 = DynamicFrame.fromDF(
@@ -126,7 +125,12 @@ def processBatch(data_frame, batchId):
                 return 0
             else:
                 return 99
-           
+
+        @udf
+        def MAP_TIME(string):
+            string = "2019-01-21T22:14:26.9792776Z"[:-2]
+            date_time = datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%S.%f")
+                return time.mktime(date_time.timetuple())
         
         azureAuditLog_df = azureAuditLog_df.withColumn("category_name", lit("Audit Activity"))\
                                                              .withColumn("category_uid", lit("3"))\
@@ -136,6 +140,7 @@ def processBatch(data_frame, batchId):
                                                              .withColumn("activity_name", MAP_AN(col('unmapped.category')))\
                                                              .withColumn("activity_id", MAP_AI(col('unmapped.category')))\
                                                              .withColumn("type_name", MAP_TN(col('unmapped.category')))\
+                                                             .withColumn("time", MAP_TIME(col('time')))\
                                                              .withColumn("type_uid", MAP_TI(col('unmapped.category')))
                                                                
         azureAuditLog_df = azureAuditLog_df.withColumn('metadata', struct([col('metadata')['product']\
