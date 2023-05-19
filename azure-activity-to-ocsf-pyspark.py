@@ -22,7 +22,7 @@ job.init(args["JOB_NAME"], args)
 AWS_REGION_NAME = ""
 AWS_ACCOUNT_ID = ""
 SECURITY-LAKE-AZURE-STREAM-ARN = ""
-DATA_LAKE_NAME = ""
+SECURITY_LAKE_BUCKET_NAME = ""
 
 # Script generated for node Kinesis Stream
 dataframe_KinesisStream_node1 = glueContext.create_data_frame.from_options(
@@ -131,7 +131,7 @@ def processBatch(data_frame, batchId):
 
         # Script generated for node S3 bucket
         S3bucket_node3_path = (
-            DATA_LAKE_NAME+"/ext/AZURE-ACTIVITY"
+            "s3://"+SECURITY_LAKE_BUCKET_NAME+"/ext/AZURE-ACTIVITY"
             + "/region=" 
             + region 
             + "/accountid=" 
