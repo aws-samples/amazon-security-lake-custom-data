@@ -29,7 +29,7 @@ dataframe_KinesisStream_node1 = glueContext.create_data_frame.from_options(
     connection_type="kinesis",
     connection_options={
         "typeOfData": "kinesis",
-        "streamARN": SECURITY-LAKE-AZURE-STREAM-ARN,
+        "streamARN": SECURITY_LAKE_AZURE_STREAM_ARN,
         "classification": "json",
         "startingPosition": "earliest",
         "inferSchema": "true",
@@ -58,6 +58,7 @@ def processBatch(data_frame, batchId):
                  ("resourceId", "string", "resource.owner.uid", "string"), 
                  ("properties.message", "string", "message", "string"),
                  ("claims.ver", "string", "metadata.product.version", "string"),
+                 ("category", "string", "category", "string"),
              ],
             transformation_ctx="ApplyMapping_node2",
         )
@@ -67,7 +68,12 @@ def processBatch(data_frame, batchId):
         #add OCSF base fields
         azureAuditLog_df = ApplyMapping_node2.toDF()
         azureAuditLog_df.show()
-
+        
+        #mapper_AN = {'Write':'Create', 'Delete':'Delete', 'Action':'Update'}
+        #EQ_ACTIVITYID = {"Write":"1", "Delete":"4", "Action":"3"}
+        #EQ_TYPENAME = {"Write":"API Acitvity: API Activity: Create", "Delete":"API Acitvity: API Activity: Delete", "Action":"API Acitvity: API Activity: Update"}
+        #EQ_TYPEUID = {"Write":"300501", "Delete":"300504", "Action":"300503"}
+        
         @udf
         def MAP_AN(source):
             if source == 'Write':
@@ -121,20 +127,24 @@ def processBatch(data_frame, batchId):
         
         azureAuditLog_df_dynf = DynamicFrame.fromDF(azureAuditLog_df, glueContext, "dynamic_frame").repartition(1)
         
+        
+        
+        
         now = datetime.datetime.now()
         year = now.year
         month = now.month
         day = now.day
+        hour = now.hour
         region = AWS_REGION_NAME
         account_id = AWS_ACCOUNT_ID
 
 
         # Script generated for node S3 bucket
         S3bucket_node3_path = (
-            "s3://"+SECURITY_LAKE_BUCKET_NAME+"/ext/AZURE-ACTIVITY"
+             "s3://"+SECURITY_LAKE_BUCKET_NAME+"/ext/AZURE-ACTIVITY"
             + "/region=" 
             + region 
-            + "/accountid=" 
+            + "/account_id=" 
             + account_id 
             + "/eventDay="
             + "{:0>4}".format(str(year))
