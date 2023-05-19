@@ -64,36 +64,67 @@ def processBatch(data_frame, batchId):
         ApplyMapping_node2.printSchema()
         ApplyMapping_node2.show(5)
         
-        if ApplyMapping_node2.category == "Write":
-            ACTIVITYNAME = "Create"
-            ACTIVITYID = 1
-            TYPENAME = "API Acitvity: API Activity: Create"
-            TYPEUID = 300501
-            
-        if ApplyMapping_node2.category == "Delete":
-            ACTIVITYNAME = "Create"
-            ACTIVITYID = 4
-            TYPENAME = "API Acitvity: API Activity: Delete"
-            TYPEUID = 300504
-            
-        if ApplyMapping_node2.category == "Action":
-            ACTIVITYNAME = "Update"
-            ACTIVITYID = 3
-            TYPENAME = "API Acitvity: API Activity: Update"
-            TYPEUID = 300503
-        
         #add OCSF base fields
-        azureAuditLog_df = ApplyMapping_node2.toDF().withColumn("activity_id",lit(ACTIVITYID))\
-                                                             .withColumn("activity_name", lit(ACTIVITYNAME))\
-                                                             .withColumn("type_name", lit(TYPENAME))\
-                                                             .withColumn("type_uid", lit(TYPEUID))\
-                                                             .withColumn("category_name", lit("Audit Activity"))\
+        azureAuditLog_df = ApplyMapping_node2.toDF()
+        azureAuditLog_df.show()
+
+        @udf
+        def MAP_AN(source):
+            if source == 'Write':
+                return 'Create'
+            if source == 'Delete':
+                return 'Delete'
+            if source == 'Action':
+                return 'Update'
+       
+        @udf
+        def MAP_AI(source):
+            if source == 'Write':
+                return '1'
+            if source == 'Delete':
+                return '4'
+            if source == 'Action':
+                return '3'
+        
+        @udf
+        def MAP_TN(source):
+            if source == 'Write':
+                return 'API Acitvity: API Activity: Create'
+            if source == 'Delete':
+                return 'API Acitvity: API Activity: Delete'
+            if source == 'Action':
+                return 'API Acitvity: API Activity: Update'
+        
+        @udf
+        def MAP_TI(source):
+            if source == 'Write':
+                return '300501'
+            if source == 'Delete':
+                return '300504'
+            if source == 'Action':
+                return '300503'
+        
+        
+        #azureAuditLog_df["ACTIVITYNAME"] = azureAuditLog_df["category"].map(mapper_AN)
+        #azureAuditLog_df["ACTIVITYID"] = azureAuditLog_df["category"].map(EQ_ACTIVITYID)
+        #azureAuditLog_df["TYPENAME"] = azureAuditLog_df["category"].map(EQ_TYPENAME)
+        #azureAuditLog_df["TYPEUID"] = azureAuditLog_df["category"].map(EQ_TYPEUID)
+                                                             
+        azureAuditLog_df = azureAuditLog_df.withColumn("category_name", lit("Audit Activity"))\
                                                              .withColumn("category_uid", lit("3"))\
                                                              .withColumn("class_name", lit("API Activity"))\
-                                                             .withColumn("class_uid", lit("3005"))
+                                                             .withColumn("class_uid", lit("3005"))\
+                                                             .withColumn("activity_name", MAP_AN(col('category')))\
+                                                             .withColumn("activity_id", MAP_AI(col('category')))\
+                                                             .withColumn("type_name", MAP_TN(col('category')))\
+                                                             .withColumn("type_uid", MAP_TI(col('category')))
                                                                
-        azureAuditLog_df = azureAuditLog_df.withColumn('metadata', struct([col('metadata')['product'].alias("product"), lit("Azure Audit Logs").alias('name'), lit("[]").alias('profiles'), lit("1.0").alias('version')]))
+        azureAuditLog_df = azureAuditLog_df.withColumn('metadata', struct([col('metadata')['product']\
+                                                            .alias("product"), lit("Azure Audit Logs").alias('name'), lit("[]")\
+                                                            .alias('profiles'), lit("1.0").alias('version')]))
+                                                            
         azureAuditLog_df = azureAuditLog_df.withColumn("unmapped", lit("[]"))
+        
         azureAuditLog_df_dynf = DynamicFrame.fromDF(azureAuditLog_df, glueContext, "dynamic_frame").repartition(1)
         
         now = datetime.datetime.now()
