@@ -50,7 +50,7 @@ def processBatch(data_frame, batchId):
                  ("operationName", "string", "api.operation", "string"), 
                  ("identity.authorization.scope", "string", "resources.details", "string"), 
                  ("caller", "string", "actor.user.uid", "string"), 
-                 ("identity.claims.ipaddr", "string", "src_endpoint.ip", "string"),
+                 ("callerIpAddress", "string", "src_endpoint.ip", "string"),
                  ("identity.claims.name", "string", "actor.user.name", "string"),
                  ("time", "string", "time", "string"), 
                  ("level", "string", "severity", "string"), 
@@ -59,6 +59,9 @@ def processBatch(data_frame, batchId):
                  ("properties.message", "string", "message", "string"),
                  ("claims.ver", "string", "metadata.product.version", "string"),
                  ("category", "string", "category", "string"),
+                 ("identity.authorization.evidence.role", "string", "unmapped.role", "string"),
+                 ("identity.authorization.evidence.principalType", "string", "unmapped.role", "string"),
+                  ("location", "string", "unmapped.role", "string"),
              ],
             transformation_ctx="ApplyMapping_node2",
         )
@@ -114,6 +117,7 @@ def processBatch(data_frame, batchId):
                                                              .withColumn("category_uid", lit("3"))\
                                                              .withColumn("class_name", lit("API Activity"))\
                                                              .withColumn("class_uid", lit("3005"))\
+                                                             .withColumn("severity_id", lit("3005"))\
                                                              .withColumn("activity_name", MAP_AN(col('category')))\
                                                              .withColumn("activity_id", MAP_AI(col('category')))\
                                                              .withColumn("type_name", MAP_TN(col('category')))\
