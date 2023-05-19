@@ -1,7 +1,3 @@
-# My Project
-
-Pending Blog Release
-
 # Azure Eventhub Interesting Fields
 
             {
