@@ -2,7 +2,7 @@
 
 Pending Blog Release
 
-##Event Field Mappings
+# Event Field Mappings
 
             operationName --> api.operation
             identity.authorization.scope --> resources.details
@@ -15,7 +15,7 @@ Pending Blog Release
             properties.message --> message
             claims.ver --> metadata.product.version
             
-##OCSF Field Mappings
+# OCSF Field Mappings
 
             activity_id --> 0
             activity_name --> Unknown
