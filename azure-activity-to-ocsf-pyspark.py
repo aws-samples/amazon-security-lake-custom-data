@@ -107,12 +107,32 @@ def processBatch(data_frame, batchId):
                 return '300504'
             if source == 'Action':
                 return '300503'
+            
+        @udf
+        def MAP_SEVID(source):
+            if source == 'Informational':
+                return 1
+            if source == 'Low':
+                return 2
+            if source == 'Medium':
+                return 3
+            if source == 'High':
+                return 4
+            if source == 'Critical':
+                return 5
+            if source == 'Fatial':
+                return 6
+            if source == 'Unknown':
+                return 0
+            else:
+                return 99
+           
         
         azureAuditLog_df = azureAuditLog_df.withColumn("category_name", lit("Audit Activity"))\
                                                              .withColumn("category_uid", lit("3"))\
                                                              .withColumn("class_name", lit("API Activity"))\
                                                              .withColumn("class_uid", lit("3005"))\
-                                                             .withColumn("severity_id", lit("3005"))\
+                                                             .withColumn("severity_id", MAP_SEVID(col('unmapped.category')))\
                                                              .withColumn("activity_name", MAP_AN(col('unmapped.category')))\
                                                              .withColumn("activity_id", MAP_AI(col('unmapped.category')))\
                                                              .withColumn("type_name", MAP_TN(col('unmapped.category')))\
