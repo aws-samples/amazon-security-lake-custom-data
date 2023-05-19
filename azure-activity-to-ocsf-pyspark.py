@@ -109,6 +109,8 @@ def processBatch(data_frame, batchId):
         
         @udf
         def MAP_SEVID(source):
+            if source == 'Information':
+                return 1
             if source == 'Informational':
                 return 1
             if source == 'Low':
