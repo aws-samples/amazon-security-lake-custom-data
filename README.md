@@ -20,8 +20,8 @@ Pending Blog Release
             activity_id --> 0
             activity_name --> Unknown
             type_name --> "API Activity: Unknown"
-            "type_uid --> 300500
-            "category_name --> "Audit Activity"
+            type_uid --> 300500
+            category_name --> "Audit Activity"
             category_uid --> 3
             class_name --> "API Activity"
             class_uid" --> 3005
