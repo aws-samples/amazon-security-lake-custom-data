@@ -64,19 +64,19 @@ def processBatch(data_frame, batchId):
         ApplyMapping_node2.printSchema()
         ApplyMapping_node2.show(5)
         
-        if category == "Write"
+        if ApplyMapping_node2.category == "Write":
             ACTIVITYNAME = "Create"
             ACTIVITYID = 1
             TYPENAME = "API Acitvity: API Activity: Create"
             TYPEUID = 300501
             
-        if category == "Delete"
+        if ApplyMapping_node2.category == "Delete":
             ACTIVITYNAME = "Create"
             ACTIVITYID = 4
             TYPENAME = "API Acitvity: API Activity: Delete"
             TYPEUID = 300504
             
-        if category == "Action"
+        if ApplyMapping_node2.category == "Action":
             ACTIVITYNAME = "Update"
             ACTIVITYID = 3
             TYPENAME = "API Acitvity: API Activity: Update"
