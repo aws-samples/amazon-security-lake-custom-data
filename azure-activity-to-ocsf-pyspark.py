@@ -107,7 +107,7 @@ def processBatch(data_frame, batchId):
                 return '300504'
             if source == 'Action':
                 return '300503'
-            
+        
         @udf
         def MAP_SEVID(source):
             if source == 'Informational':
