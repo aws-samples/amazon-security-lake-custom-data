@@ -58,10 +58,10 @@ def processBatch(data_frame, batchId):
                  ("resourceId", "string", "resource.owner.uid", "string"), 
                  ("properties.message", "string", "message", "string"),
                  ("claims.ver", "string", "metadata.product.version", "string"),
-                 ("category", "string", "category", "string"),
+                 ("category", "string", "unmapped.category", "string"),
                  ("identity.authorization.evidence.role", "string", "unmapped.role", "string"),
-                 ("identity.authorization.evidence.principalType", "string", "unmapped.role", "string"),
-                  ("location", "string", "unmapped.role", "string"),
+                 ("identity.authorization.evidence.principalType", "string", "unmapped.principalType", "string"),
+                 ("location", "string", "unmapped.location", "string"),
              ],
             transformation_ctx="ApplyMapping_node2",
         )
@@ -71,11 +71,6 @@ def processBatch(data_frame, batchId):
         #add OCSF base fields
         azureAuditLog_df = ApplyMapping_node2.toDF()
         azureAuditLog_df.show()
-        
-        #mapper_AN = {'Write':'Create', 'Delete':'Delete', 'Action':'Update'}
-        #EQ_ACTIVITYID = {"Write":"1", "Delete":"4", "Action":"3"}
-        #EQ_TYPENAME = {"Write":"API Acitvity: API Activity: Create", "Delete":"API Acitvity: API Activity: Delete", "Action":"API Acitvity: API Activity: Update"}
-        #EQ_TYPEUID = {"Write":"300501", "Delete":"300504", "Action":"300503"}
         
         @udf
         def MAP_AN(source):
@@ -112,27 +107,22 @@ def processBatch(data_frame, batchId):
                 return '300504'
             if source == 'Action':
                 return '300503'
-                                                             
+        
         azureAuditLog_df = azureAuditLog_df.withColumn("category_name", lit("Audit Activity"))\
                                                              .withColumn("category_uid", lit("3"))\
                                                              .withColumn("class_name", lit("API Activity"))\
                                                              .withColumn("class_uid", lit("3005"))\
                                                              .withColumn("severity_id", lit("3005"))\
-                                                             .withColumn("activity_name", MAP_AN(col('category')))\
-                                                             .withColumn("activity_id", MAP_AI(col('category')))\
-                                                             .withColumn("type_name", MAP_TN(col('category')))\
-                                                             .withColumn("type_uid", MAP_TI(col('category')))
+                                                             .withColumn("activity_name", MAP_AN(col('unmapped.category')))\
+                                                             .withColumn("activity_id", MAP_AI(col('unmapped.category')))\
+                                                             .withColumn("type_name", MAP_TN(col('unmapped.category')))\
+                                                             .withColumn("type_uid", MAP_TI(col('unmapped.category')))
                                                                
         azureAuditLog_df = azureAuditLog_df.withColumn('metadata', struct([col('metadata')['product']\
                                                             .alias("product"), lit("Azure Audit Logs").alias('name'), lit("[]")\
                                                             .alias('profiles'), lit("1.0").alias('version')]))
-                                                            
-        azureAuditLog_df = azureAuditLog_df.withColumn("unmapped", lit("[]"))
         
         azureAuditLog_df_dynf = DynamicFrame.fromDF(azureAuditLog_df, glueContext, "dynamic_frame").repartition(1)
-        
-        
-        
         
         now = datetime.datetime.now()
         year = now.year
@@ -141,7 +131,6 @@ def processBatch(data_frame, batchId):
         hour = now.hour
         region = AWS_REGION_NAME
         account_id = AWS_ACCOUNT_ID
-
 
         # Script generated for node S3 bucket
         S3bucket_node3_path = (
