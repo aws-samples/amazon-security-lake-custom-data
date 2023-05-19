@@ -51,7 +51,7 @@ def processBatch(data_frame, batchId):
                  ("identity.authorization.scope", "string", "resources.details", "string"), 
                  ("caller", "string", "identity.user.uid", "string"), 
                  ("identity.claims.ipaddr", "string", "src_endpoint.ip", "string"),
-                 ("identity.claims.name", "string", "identity.user.name", "string"),
+                 ("identity.claims.name", "string", "actor.user.name", "string"),
                  ("time", "string", "time", "string"), 
                  ("level", "string", "severity", "string"), 
                  ("identity.claims.groups", "string", "resources.group_name", "string"),
@@ -65,8 +65,10 @@ def processBatch(data_frame, batchId):
         ApplyMapping_node2.show(5)
         
         #add OCSF base fields
-        azureAuditLog_df = ApplyMapping_node2.toDF().withColumn("activity_id",lit("3"))\
-                                                             .withColumn("activity_name", lit("Operational"))\
+        azureAuditLog_df = ApplyMapping_node2.toDF().withColumn("activity_id",lit("0"))\
+                                                             .withColumn("activity_name", lit("Unknown"))\
+                                                             .withColumn("type_name", lit("API Activity: Unknown"))\
+                                                             .withColumn("type_uid", lit("300500"))\
                                                              .withColumn("category_name", lit("Audit Activity"))\
                                                              .withColumn("category_uid", lit("3"))\
                                                              .withColumn("class_name", lit("API Activity"))\
@@ -80,7 +82,6 @@ def processBatch(data_frame, batchId):
         year = now.year
         month = now.month
         day = now.day
-        hour = now.hour
         region = AWS_REGION_NAME
         account_id = AWS_ACCOUNT_ID
 
@@ -90,13 +91,12 @@ def processBatch(data_frame, batchId):
             DATA_LAKE_NAME+"/ext/AZURE-ACTIVITY"
             + "/region=" 
             + region 
-            + "/account_id=" 
+            + "/accountid=" 
             + account_id 
-            + "/eventHour="
+            + "/eventDay="
             + "{:0>4}".format(str(year))
             + "{:0>2}".format(str(month))
             + "{:0>2}".format(str(day))
-            + "{:0>2}".format(str(hour))
             + "/"
         )
         S3bucket_node3 = glueContext.write_dynamic_frame.from_options(
