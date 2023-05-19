@@ -21,7 +21,7 @@ job.init(args["JOB_NAME"], args)
 
 AWS_REGION_NAME = ""
 AWS_ACCOUNT_ID = ""
-SECURITY-LAKE-AZURE-STREAM-ARN = ""
+SECURITY_LAKE_AZURE_STREAM_ARN = ""
 DATA_LAKE_NAME = ""
 
 # Script generated for node Kinesis Stream
@@ -29,7 +29,7 @@ dataframe_KinesisStream_node1 = glueContext.create_data_frame.from_options(
     connection_type="kinesis",
     connection_options={
         "typeOfData": "kinesis",
-        "streamARN": SECURITY-LAKE-AZURE-STREAM-ARN,
+        "streamARN": SECURITY_LAKE_AZURE_STREAM_ARN,
         "classification": "json",
         "startingPosition": "earliest",
         "inferSchema": "true",
