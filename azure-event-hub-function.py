@@ -5,19 +5,19 @@ import botocore
 import json
 from botocore.exceptions import ClientError
 
-SECURITY-LAKE-AZURE-STREAM-ARN = ""
-SECURITY-LAKE-AZURE-STREAM-NAME = ""
-SECURITY-LAKE-AZURE-KEYID = ""
+SECURITY_LAKE_AZURE_STREAM_ARN = ""
+SECURITY_LAKE_AZURE_STREAM_NAME = ""
+SECURITY_LAKE_AZURE_KEYID = ""
 
 def main(event: func.EventHubEvent):
 
     kinesis_client = boto3.client('kinesis')
     
     response = kinesis_client.start_stream_encryption(
-        StreamName=SECURITY-LAKE-AZURE-STREAM-NAME,
+        StreamName=SECURITY_LAKE-AZURE_STREAM_NAME,
         EncryptionType='KMS',
-        KeyId=SECURITY-LAKE-AZURE-KEYID,
-        StreamARN=SECURITY-LAKE-AZURE-STREAM-ARN
+        KeyId=SECURITY_LAKE_AZURE_KEYID,
+        StreamARN=SECURITY_LAKE_AZURE_STREAM_ARN
     )
 
     for i in event:
@@ -27,7 +27,7 @@ def main(event: func.EventHubEvent):
             logging.info(record)
             logging.info(type(record))
 
-            response = kinesis_client.put_record(StreamName=SECURITY-LAKE-AZURE-STREAM-ARN, 
+            response = kinesis_client.put_record(StreamName=SECURITY_LAKE_AZURE_STREAM_ARN, 
             Data=json.dumps(record), 
             PartitionKey="time"
 )
