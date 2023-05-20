@@ -129,10 +129,11 @@ def processBatch(data_frame, batchId):
            
         @udf
         def MAP_TIME(string):
-            string = string[:-9]
-            date_time = datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%S")
-            date_time = str(time.mktime(date_time.timetuple())).replace(".","")
-            return int(date_time)
+            string = string[:-2]
+            date_time = datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%S.%f")
+            date_time = datetime.datetime(date_time.year, date_time.month, date_time.day, date_time.hour, date_time.minute, date_time.second)
+            date_time = int(time.mktime(date_time.timetuple()))
+            return date_time
         
         azureAuditLog_df = azureAuditLog_df.withColumn("category_name", lit("Audit Activity"))\
                                                              .withColumn("category_uid", lit(3))\
@@ -142,7 +143,7 @@ def processBatch(data_frame, batchId):
                                                              .withColumn("activity_name", MAP_AN(col('unmapped.category')))\
                                                              .withColumn("activity_id", MAP_AI(col('unmapped.category')).cast('integer'))\
                                                              .withColumn("type_uid", MAP_TI(col('unmapped.category')).cast('integer'))\
-                                                             .withColumn("time", MAP_TIME(col('time')))\
+                                                             .withColumn("time", MAP_TIME(col('time')).cast('integer'))\
                                                              .withColumn("type_name", MAP_TN(col('unmapped.category')))
 
         azureAuditLog_df = azureAuditLog_df.withColumn(
@@ -166,6 +167,8 @@ def processBatch(data_frame, batchId):
                 )
             )
         )
+        
+        #azureAuditLog_df = azureAuditLog_df.withColumn("time2", col('time').cast('integer'))
         
         azureAuditLog_df_dynf = DynamicFrame.fromDF(azureAuditLog_df, glueContext, "dynamic_frame").repartition(1)
         
