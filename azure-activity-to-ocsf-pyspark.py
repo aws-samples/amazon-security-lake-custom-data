@@ -48,14 +48,11 @@ def processBatch(data_frame, batchId):
             frame=KinesisStream_node1,
             mappings=[
                  ("operationName", "string", "api.operation", "string"), 
-                 ("identity.authorization.scope", "string", "resources.details", "string"), 
                  ("caller", "string", "actor.user.uid", "string"), 
                  ("callerIpAddress", "string", "src_endpoint.ip", "string"),
                  ("identity.claims.name", "string", "actor.user.name", "string"),
                  ("time", "string", "time", "string"), 
                  ("level", "string", "severity", "string"), 
-                 ("identity.claims.groups", "string", "resources.group_name", "string"),
-                 ("resourceId", "string", "resource.owner.uid", "string"), 
                  ("properties.message", "string", "message", "string"),
                  ("identity.claims.ver", "string", "metadata.product.version", "string"),
                  ("identity.claims.ver", "string", "metadata.product.name", "string"),
@@ -133,19 +130,19 @@ def processBatch(data_frame, batchId):
         @udf
         def MAP_TIME(string):
             string = "2019-01-21T22:14:26.9792776Z"[:-2]
-            date_time = datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%S.%f")
-            return time.mktime(date_time.timetuple())
+            date_time = datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%S")
+            return int(((str(time.mktime(date_time.timetuple())).replace(".","")+"00")))
         
         azureAuditLog_df = azureAuditLog_df.withColumn("category_name", lit("Audit Activity"))\
                                                              .withColumn("category_uid", lit(3))\
                                                              .withColumn("class_name", lit("API Activity"))\
                                                              .withColumn("class_uid", lit(3005))\
-                                                             .withColumn("severity_id", MAP_SEVID(col('unmapped.category')))\
+                                                             .withColumn("severity_id", MAP_SEVID(col('severity')).cast('integer'))\
                                                              .withColumn("activity_name", MAP_AN(col('unmapped.category')))\
-                                                             .withColumn("activity_id", MAP_AI(col('unmapped.category')))\
+                                                             .withColumn("activity_id", MAP_AI(col('unmapped.category')).cast('integer'))\
                                                              .withColumn("type_name", MAP_TN(col('unmapped.category')))\
-                                                             .withColumn("time", MAP_TIME(col('time')))\
-                                                             .withColumn("type_uid", MAP_TI(col('unmapped.category')))
+                                                             .withColumn("type_uid", MAP_TI(col('unmapped.category')).cast('integer'))\
+                                                             .withColumn("time", MAP_TIME(col('time')).cast('integer'))
 
         azureAuditLog_df = azureAuditLog_df.withColumn(
             "metadata",
@@ -153,7 +150,18 @@ def processBatch(data_frame, batchId):
                 "product",
                 col("metadata.product").withField(
                     "name",
-                    lit("Azure Audit Logs")
+                    lit("Azure")
+                )
+            )
+        )
+        
+        azureAuditLog_df = azureAuditLog_df.withColumn(
+            "metadata",
+            col("metadata").withField(
+                "product",
+                col("metadata.product").withField(
+                    "vendor_name",
+                    lit("Microsoft")
                 )
             )
         )
