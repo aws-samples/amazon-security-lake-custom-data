@@ -54,7 +54,7 @@ def processBatch(data_frame, batchId):
                  ("time", "string", "time", "string"), 
                  ("level", "string", "severity", "string"), 
                  ("properties.message", "string", "message", "string"),
-                 ("identity.claims.ver", "string", "metadata.product.version", "string"),
+                 ("identity.claims.ver", "string", "metadata.version", "string"),
                  ("identity.claims.ver", "string", "metadata.product.name", "string"),
                  ("category", "string", "unmapped.category", "string"),
                  ("identity.authorization.evidence.role", "string", "unmapped.role", "string"),
@@ -129,9 +129,10 @@ def processBatch(data_frame, batchId):
            
         @udf
         def MAP_TIME(string):
-            string = "2019-01-21T22:14:26.9792776Z"[:-2]
+            string = string[:-9]
             date_time = datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%S")
-            return int(((str(time.mktime(date_time.timetuple())).replace(".","")+"00")))
+            date_time = str(time.mktime(date_time.timetuple())).replace(".","")
+            return int(date_time)
         
         azureAuditLog_df = azureAuditLog_df.withColumn("category_name", lit("Audit Activity"))\
                                                              .withColumn("category_uid", lit(3))\
@@ -140,9 +141,9 @@ def processBatch(data_frame, batchId):
                                                              .withColumn("severity_id", MAP_SEVID(col('severity')).cast('integer'))\
                                                              .withColumn("activity_name", MAP_AN(col('unmapped.category')))\
                                                              .withColumn("activity_id", MAP_AI(col('unmapped.category')).cast('integer'))\
-                                                             .withColumn("type_name", MAP_TN(col('unmapped.category')))\
                                                              .withColumn("type_uid", MAP_TI(col('unmapped.category')).cast('integer'))\
-                                                             .withColumn("time", MAP_TIME(col('time')).cast('integer'))
+                                                             .withColumn("time", MAP_TIME(col('time')))\
+                                                             .withColumn("type_name", MAP_TN(col('unmapped.category')))
 
         azureAuditLog_df = azureAuditLog_df.withColumn(
             "metadata",
