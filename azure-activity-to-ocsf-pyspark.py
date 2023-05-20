@@ -37,6 +37,7 @@ dataframe_KinesisStream_node1 = glueContext.create_data_frame.from_options(
     transformation_ctx="dataframe_KinesisStream_node1",
 )
 
+
 def processBatch(data_frame, batchId):
     if data_frame.count() > 0:
         KinesisStream_node1 = DynamicFrame.fromDF(
@@ -56,7 +57,8 @@ def processBatch(data_frame, batchId):
                  ("identity.claims.groups", "string", "resources.group_name", "string"),
                  ("resourceId", "string", "resource.owner.uid", "string"), 
                  ("properties.message", "string", "message", "string"),
-                 ("claims.ver", "string", "metadata.product.version", "string"),
+                 ("identity.claims.ver", "string", "metadata.product.version", "string"),
+                 ("identity.claims.ver", "string", "metadata.product.name", "string"),
                  ("category", "string", "unmapped.category", "string"),
                  ("identity.authorization.evidence.role", "string", "unmapped.role", "string"),
                  ("identity.authorization.evidence.principalType", "string", "unmapped.principalType", "string"),
@@ -83,11 +85,11 @@ def processBatch(data_frame, batchId):
         @udf
         def MAP_AI(source):
             if source == 'Write':
-                return '1'
+                return int(1)
             if source == 'Delete':
-                return '4'
+                return int(4)
             if source == 'Action':
-                return '3'
+                return int(3)
         
         @udf
         def MAP_TN(source):
@@ -101,53 +103,60 @@ def processBatch(data_frame, batchId):
         @udf
         def MAP_TI(source):
             if source == 'Write':
-                return '300501'
+                return int(300501)
             if source == 'Delete':
-                return '300504'
+                return int(300504)
             if source == 'Action':
-                return '300503'
+                return int(300503)
         
         @udf
         def MAP_SEVID(source):
             if source == 'Information':
-                return 1
+                return int(1)
             if source == 'Informational':
-                return 1
+                return int(1)
             if source == 'Low':
-                return 2
+                return int(2)
             if source == 'Medium':
-                return 3
+                return int(3)
             if source == 'High':
-                return 4
+                return int(4)
             if source == 'Critical':
-                return 5
+                return int(5)
             if source == 'Fatial':
-                return 6
+                return int(6)
             if source == 'Unknown':
-                return 0
+                return int(0)
             else:
-                return 99
-
+                return int(99)
+           
         @udf
         def MAP_TIME(string):
             string = "2019-01-21T22:14:26.9792776Z"[:-2]
             date_time = datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%S.%f")
-                return time.mktime(date_time.timetuple())
+            return time.mktime(date_time.timetuple())
         
         azureAuditLog_df = azureAuditLog_df.withColumn("category_name", lit("Audit Activity"))\
-                                                             .withColumn("category_uid", lit("3"))\
+                                                             .withColumn("category_uid", lit(3))\
                                                              .withColumn("class_name", lit("API Activity"))\
-                                                             .withColumn("class_uid", lit("3005"))\
+                                                             .withColumn("class_uid", lit(3005))\
                                                              .withColumn("severity_id", MAP_SEVID(col('unmapped.category')))\
                                                              .withColumn("activity_name", MAP_AN(col('unmapped.category')))\
                                                              .withColumn("activity_id", MAP_AI(col('unmapped.category')))\
                                                              .withColumn("type_name", MAP_TN(col('unmapped.category')))\
                                                              .withColumn("time", MAP_TIME(col('time')))\
                                                              .withColumn("type_uid", MAP_TI(col('unmapped.category')))
-                                                               
-        azureAuditLog_df = azureAuditLog_df.withColumn('metadata', struct([col('metadata')['product']\
-                                                            .alias("product"), lit("Azure Audit Logs").alias('name'), lit("[]")\
-                                                            .alias('profiles'), lit("1.0").alias('version')]))
+
+        azureAuditLog_df = azureAuditLog_df.withColumn(
+            "metadata",
+            col("metadata").withField(
+                "product",
+                col("metadata.product").withField(
+                    "name",
+                    lit("Azure Audit Logs")
+                )
+            )
+        )
         
         azureAuditLog_df_dynf = DynamicFrame.fromDF(azureAuditLog_df, glueContext, "dynamic_frame").repartition(1)
         
