@@ -36,7 +36,8 @@
 
 # Azure EventHub Source Field Table
 
-![image](https://github.com/aws-samples/amazon-security-lake-custom-data/assets/106110648/9d5b6a5e-3582-46c6-8ae3-dec34cb77611)
+![image](https://github.com/aws-samples/amazon-security-lake-custom-data/assets/106110648/61563cf2-69a5-423c-b14e-9b2c7c23527c)
+
 
 
 
