@@ -82,34 +82,49 @@
 
 ![image](https://github.com/aws-samples/amazon-security-lake-custom-data/assets/106110648/61563cf2-69a5-423c-b14e-9b2c7c23527c)
 
-
-
-
-
-
-# Event Field Mappings
-
-            operationName --> api.operation
-            identity.authorization.scope --> resources.details
-            caller --> actor.user.uid
-            identity.claims.ipaddr --> actor.user.name
-            time --> time
-            level--> severity
-            identity.claims.groups --> resources.group_name
-            resourceId -->, "resource.owner.uid
-            properties.message --> message
-            claims.ver --> metadata.product.version
             
-# OCSF Field Mappings
+ ### OCSF Version: 1.0.0-rc.2
+  - `class_name`: `API Activity`
+  - `class_uid`: `3005`
+  - `category_name`: `Audit Activity`
+  - `category_uid`: `3`
+  - `cloud.provider`: `Microsoft`
+  - `severity_id`: `1`
+  - `metadata.product.name`: `Azure Event Hub Activity`
+  - `metadata.product.vendor_name`: `Microsoft`
+  - `metadata.profiles`: `[cloud]`
 
-            activity_id --> 3/4/5
-            activity_name --> Create/Delete/Update
-            type_name --> "API Activity: Unknown"
-            type_uid --> 300500/300503/300504
-            category_name --> "Audit Activity"
-            category_uid --> 3
-            class_name --> "API Activity"
-            class_uid" --> 3005
+ ### Mapping:
+ - This does not reflect any transformations or evaluations of the data. Some data evaluation and transformation will be necessary for a correct representation in OCSF that matches all requirements.
+
+Any fields not present in an explicit mapping will be mapped to the unmapped object. 
+
+| OCSF                       | Raw             |
+| -------------------------- | ----------------|
+|`operationName`|`api.operation`|
+|`caller`|`actor.user.uid`|
+|`callerIpAddress`|`src_endpoint.ip`|
+|`identity.claims.name`|`actor.user.name`|
+|`time`|`time`|
+|`properties.message`|`message`|
+|`identity.claims.ver`|`metadata.product.version`|
+|`category`|`unmapped.category`|
+|`identity.authorization.evidence.role`|`unmapped.role`|
+|`identity.authorization.evidence.principalType`|`unmapped.principalType`|
+|`location`|`unmapped.location`|
+
+ ### Conditional Mapping:
+ - Any fields described within the conditional mappings are subject to dynamic mappings contingent on a conditional evaluation of source data. Fields which fail to meet a particular conditional are assigned a default value from the OCSF schema description.
+
+| OCSF                       | Raw             |
+| -------------------------- | ----------------|
+|`level`|`severity`|
+|`level`|`severity_id`|
+|`activity_name`|`category`|
+|`activity_id`|`category`|
+|`type_uid`|`category`|
+|`type_name`|`category`|
+
 
 # Security
 
