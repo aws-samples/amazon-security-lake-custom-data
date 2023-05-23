@@ -47,6 +47,8 @@ Any fields not present in an explicit mapping will be mapped to the unmapped obj
 |`type_uid`|`category`|
 |`type_name`|`category`|
 
+
+
 # Azure Eventhub Sample Policy Event
 
     {
