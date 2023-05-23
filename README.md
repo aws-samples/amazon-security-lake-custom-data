@@ -36,34 +36,35 @@
 
 # Azure EventHub Source Field Table
 
-            Schema from storage account and event hubs		
+Schema from storage account and event hubs		
+		
+When streaming the Azure Activity log to a storage account or event hub, the data follows the resource log schema. The table below provides a mapping of properties from the above schemas to the resource logs schema.		
+		
+ Important		
+		
+The format of Activity log data written to a storage account changed to JSON Lines on Nov. 1st, 2018. See Prepare for format change to Azure Monitor resource logs archived to a storage account for details on this format change.		
+		
+Resource logs schema property	Activity Log REST API schema property	Notes
+time	eventTimestamp	
+resourceId	resourceId	subscriptionId, resourceType, resourceGroupName are all inferred from the resourceId.
+operationName	operationName.value	
+category	Part of operation name	Breakout of the operation type - "Write"/"Delete"/"Action"
+resultType	status.value	
+resultSignature	substatus.value	
+resultDescription	description	
+durationMs	N/A	Always 0
+callerIpAddress	httpRequest.clientIpAddress	
+correlationId	correlationId	
+identity	claims and authorization properties	
+Level	Level	
+location	N/A	Location of where the event was processed. This is not the location of the resource, but rather where the event was processed. This property will be removed in a future update.
+Properties	properties.eventProperties	
+properties.eventCategory	category	If properties.eventCategory is not present, category is "Administrative"
+properties.eventName	eventName	
+properties.operationId	operationId	
+properties.eventProperties	properties	
+![image](https://github.com/aws-samples/amazon-security-lake-custom-data/assets/106110648/5e3e9f0c-4daf-4196-8589-afa5d270ddfc)
 
-            When streaming the Azure Activity log to a storage account or event hub, the data follows the resource log schema. The table below provides a mapping of properties from the above schemas to the resource logs schema.		
-
-             Important		
-
-            The format of Activity log data written to a storage account changed to JSON Lines on Nov. 1st, 2018. See Prepare for format change to Azure Monitor resource logs archived to a storage account for details on this format change.		
-
-            Resource logs schema property	Activity Log REST API schema property	Notes
-            time	eventTimestamp	
-            resourceId	resourceId	subscriptionId, resourceType, resourceGroupName are all inferred from the resourceId.
-            operationName	operationName.value	
-            category	Part of operation name	Breakout of the operation type - "Write"/"Delete"/"Action"
-            resultType	status.value	
-            resultSignature	substatus.value	
-            resultDescription	description	
-            durationMs	N/A	Always 0
-            callerIpAddress	httpRequest.clientIpAddress	
-            correlationId	correlationId	
-            identity	claims and authorization properties	
-            Level	Level	
-            location	N/A	Location of where the event was processed. This is not the location of the resource, but rather where the event was processed. This property will be removed in a future update.
-            Properties	properties.eventProperties	
-            properties.eventCategory	category	If properties.eventCategory is not present, category is "Administrative"
-            properties.eventName	eventName	
-            properties.operationId	operationId	
-            properties.eventProperties	properties	
-            ![image](https://github.com/aws-samples/amazon-security-lake-custom-data/assets/106110648/adae5613-f30f-4d6c-8f51-6dfd1ae84487)
 
 
 
