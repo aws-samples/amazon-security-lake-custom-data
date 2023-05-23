@@ -1,6 +1,4 @@
 import sys
-import datetime
-import time
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
@@ -9,7 +7,9 @@ from awsglue.job import Job
 from awsglue.dynamicframe import DynamicFrame
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
+
 from pyspark.sql import DataFrame, Row
+import datetime
 from awsglue import DynamicFrame
 
 args = getResolvedOptions(sys.argv, ["JOB_NAME"])
@@ -19,10 +19,10 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
 
-AWS_REGION_NAME = "us-east-2"
-AWS_ACCOUNT_ID = "087661832257"
-SECURITY_LAKE_AZURE_STREAM_ARN = "arn:aws:kinesis:us-east-2:087661832257:stream/lakestream_10577820"
-SECURITY_LAKE_BUCKET_NAME = "aws-security-data-lake-us-east-2-j3pqdigdmnvgwqgkxqj24zqqgdvpua"
+AWS_REGION_NAME = ""
+AWS_ACCOUNT_ID = ""
+SECURITY-LAKE-AZURE-STREAM-ARN = ""
+SECURITY_LAKE_BUCKET_NAME = ""
 
 # Script generated for node Kinesis Stream
 dataframe_KinesisStream_node1 = glueContext.create_data_frame.from_options(
@@ -55,11 +55,11 @@ def processBatch(data_frame, batchId):
                  ("level", "string", "severity", "string"), 
                  ("properties.message", "string", "message", "string"),
                  ("identity.claims.ver", "string", "metadata.product.version", "string"),
+                 ("identity.claims.ver", "string", "metadata.product.name", "string"),
                  ("category", "string", "unmapped.category", "string"),
                  ("identity.authorization.evidence.role", "string", "unmapped.role", "string"),
                  ("identity.authorization.evidence.principalType", "string", "unmapped.principalType", "string"),
                  ("location", "string", "unmapped.location", "string"),
-                 ("identity.claims.ver", "string", "cloud.provider", "string"),
              ],
             transformation_ctx="ApplyMapping_node2",
         )
@@ -176,21 +176,7 @@ def processBatch(data_frame, batchId):
             )
         )
         
-        azureAuditLog_df = azureAuditLog_df.withColumn(
-            "metadata",
-            col("metadata").withField(
-                "profiles",
-                lit("cloud")
-            )
-        )
-        
-        #azureAuditLog_df = azureAuditLog_df.withColumn(
-        #    "cloud",
-        #    col("cloud").withField(
-        #        "provider",
-        #        lit("Microsoft")
-        #    )
-        #)
+        #azureAuditLog_df = azureAuditLog_df.withColumn("time2", col('time').cast('integer'))
         
         azureAuditLog_df_dynf = DynamicFrame.fromDF(azureAuditLog_df, glueContext, "dynamic_frame").repartition(1)
         
