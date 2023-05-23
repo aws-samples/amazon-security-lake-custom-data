@@ -1,8 +1,10 @@
-Event Dossier: Microsoft Azure Generic Event Hub Cloud Activity
-An Azure Event Hub Activity Log Event
-Description: Translates a DescribeDirectConnectGateways Event to OCSF.
-Event References:
-[https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-examples.html](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log-schema)
+# Event Dossier: Microsoft Azure Generic Event Hub Cloud Activity
+
+### An Azure Event Hub Activity Log Event
+- **Description**: Translates a Azure Eventhub Activity Event to OCSF.
+- **Event References**:
+  - [https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-examples.html](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-examples.html](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log-schema)
+
 
 ### OCSF Version: 1.0.0-rc.2
   - `class_name`: `API Activity`
