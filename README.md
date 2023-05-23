@@ -89,7 +89,6 @@
   - `category_name`: `Audit Activity`
   - `category_uid`: `3`
   - `cloud.provider`: `Microsoft`
-  - `severity_id`: `1`
   - `metadata.product.name`: `Azure Event Hub Activity`
   - `metadata.product.vendor_name`: `Microsoft`
   - `metadata.profiles`: `[cloud]`
