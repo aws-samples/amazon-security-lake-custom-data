@@ -172,7 +172,7 @@ def processBatch(data_frame, batchId):
             "metadata",
             col("metadata").withField(
                 "version",
-                    lit("1.0.0-rc.2")
+                lit("1.0.0-rc.2")
             )
         )
         
