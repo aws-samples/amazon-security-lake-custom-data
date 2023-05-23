@@ -49,10 +49,10 @@
             
 # OCSF Field Mappings
 
-            activity_id --> 0
-            activity_name --> Unknown
+            activity_id --> 3/4/5
+            activity_name --> Create/Delete/Update
             type_name --> "API Activity: Unknown"
-            type_uid --> 300500
+            type_uid --> 300500/300503/300504
             category_name --> "Audit Activity"
             category_uid --> 3
             class_name --> "API Activity"
