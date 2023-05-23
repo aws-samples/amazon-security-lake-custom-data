@@ -182,7 +182,7 @@ def processBatch(data_frame, batchId):
 
         # Script generated for node S3 bucket
         S3bucket_node3_path = (
-             "s3://"+SECURITY_LAKE_BUCKET_NAME+"/ext/AZURE-ACTIVITY"
+             "s3://"+SECURITY_LAKE_BUCKET_NAME+"/ext/AZURE_ACTIVITY"
             + "/region=" 
             + region 
             + "/accountid=" 
