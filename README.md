@@ -34,6 +34,29 @@
             }
 
 
+# Azure EventHub Source Field Table
+
+Resource logs schema property	Activity Log REST API schema property	Notes
+time	eventTimestamp	
+resourceId	resourceId	subscriptionId, resourceType, resourceGroupName are all inferred from the resourceId.
+operationName	operationName.value	
+category	Part of operation name	Breakout of the operation type - "Write"/"Delete"/"Action"
+resultType	status.value	
+resultSignature	substatus.value	
+resultDescription	description	
+durationMs	N/A	Always 0
+callerIpAddress	httpRequest.clientIpAddress	
+correlationId	correlationId	
+identity	claims and authorization properties	
+Level	Level	
+location	N/A	Location of where the event was processed. This is not the location of the resource, but rather where the event was processed. This property will be removed in a future update.
+Properties	properties.eventProperties	
+properties.eventCategory	category	If properties.eventCategory is not present, category is "Administrative"
+properties.eventName	eventName	
+properties.operationId	operationId	
+properties.eventProperties	properties
+
+
 # Event Field Mappings
 
             operationName --> api.operation
