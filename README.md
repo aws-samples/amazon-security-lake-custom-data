@@ -1,3 +1,44 @@
+### OCSF Version: 1.0.0-rc.2
+  - `class_name`: `API Activity`
+  - `class_uid`: `3005`
+  - `category_name`: `Audit Activity`
+  - `category_uid`: `3`
+  - `cloud.provider`: `Microsoft`
+  - `metadata.product.name`: `Azure Event Hub Activity`
+  - `metadata.product.vendor_name`: `Microsoft`
+  - `metadata.profiles`: `[cloud]`
+
+ ### Mapping:
+ - This does not reflect any transformations or evaluations of the data. Some data evaluation and transformation will be necessary for a correct representation in OCSF that matches all requirements.
+
+Any fields not present in an explicit mapping will be mapped to the unmapped object. 
+
+| OCSF                       | Raw             |
+| -------------------------- | ----------------|
+|`operationName`|`api.operation`|
+|`caller`|`actor.user.uid`|
+|`callerIpAddress`|`src_endpoint.ip`|
+|`identity.claims.name`|`actor.user.name`|
+|`time`|`time`|
+|`properties.message`|`message`|
+|`identity.claims.ver`|`metadata.product.version`|
+|`category`|`unmapped.category`|
+|`identity.authorization.evidence.role`|`unmapped.role`|
+|`identity.authorization.evidence.principalType`|`unmapped.principalType`|
+|`location`|`unmapped.location`|
+
+ ### Conditional Mapping:
+ - Any fields described within the conditional mappings are subject to dynamic mappings contingent on a conditional evaluation of source data. Fields which fail to meet a particular conditional are assigned a default value from the OCSF schema description.
+
+| OCSF                       | Raw             |
+| -------------------------- | ----------------|
+|`level`|`severity`|
+|`level`|`severity_id`|
+|`activity_name`|`category`|
+|`activity_id`|`category`|
+|`type_uid`|`category`|
+|`type_name`|`category`|
+
 # Azure Eventhub Sample Policy Event
 
             {
@@ -81,49 +122,6 @@
 # Azure EventHub Source Field Table
 
 ![image](https://github.com/aws-samples/amazon-security-lake-custom-data/assets/106110648/61563cf2-69a5-423c-b14e-9b2c7c23527c)
-
-            
- ### OCSF Version: 1.0.0-rc.2
-  - `class_name`: `API Activity`
-  - `class_uid`: `3005`
-  - `category_name`: `Audit Activity`
-  - `category_uid`: `3`
-  - `cloud.provider`: `Microsoft`
-  - `metadata.product.name`: `Azure Event Hub Activity`
-  - `metadata.product.vendor_name`: `Microsoft`
-  - `metadata.profiles`: `[cloud]`
-
- ### Mapping:
- - This does not reflect any transformations or evaluations of the data. Some data evaluation and transformation will be necessary for a correct representation in OCSF that matches all requirements.
-
-Any fields not present in an explicit mapping will be mapped to the unmapped object. 
-
-| OCSF                       | Raw             |
-| -------------------------- | ----------------|
-|`operationName`|`api.operation`|
-|`caller`|`actor.user.uid`|
-|`callerIpAddress`|`src_endpoint.ip`|
-|`identity.claims.name`|`actor.user.name`|
-|`time`|`time`|
-|`properties.message`|`message`|
-|`identity.claims.ver`|`metadata.product.version`|
-|`category`|`unmapped.category`|
-|`identity.authorization.evidence.role`|`unmapped.role`|
-|`identity.authorization.evidence.principalType`|`unmapped.principalType`|
-|`location`|`unmapped.location`|
-
- ### Conditional Mapping:
- - Any fields described within the conditional mappings are subject to dynamic mappings contingent on a conditional evaluation of source data. Fields which fail to meet a particular conditional are assigned a default value from the OCSF schema description.
-
-| OCSF                       | Raw             |
-| -------------------------- | ----------------|
-|`level`|`severity`|
-|`level`|`severity_id`|
-|`activity_name`|`category`|
-|`activity_id`|`category`|
-|`type_uid`|`category`|
-|`type_name`|`category`|
-
 
 # Security
 
