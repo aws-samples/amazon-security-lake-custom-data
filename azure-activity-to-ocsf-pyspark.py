@@ -54,7 +54,7 @@ def processBatch(data_frame, batchId):
                  ("time", "string", "time", "string"), 
                  ("level", "string", "severity", "string"), 
                  ("properties.message", "string", "message", "string"),
-                 ("identity.claims.ver", "string", "metadata.version", "string"),
+                 ("identity.claims.ver", "string", "metadata.product.version", "string"),
                  ("identity.claims.ver", "string", "metadata.product.name", "string"),
                  ("category", "string", "unmapped.category", "string"),
                  ("identity.authorization.evidence.role", "string", "unmapped.role", "string"),
@@ -165,6 +165,14 @@ def processBatch(data_frame, batchId):
                     "vendor_name",
                     lit("Microsoft")
                 )
+            )
+        )
+        
+        azureAuditLog_df = azureAuditLog_df.withColumn(
+            "metadata",
+            col("metadata").withField(
+                "version",
+                    lit("1.0.0-rc.2")
             )
         )
         
