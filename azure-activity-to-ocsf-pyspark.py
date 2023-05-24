@@ -47,19 +47,49 @@ def processBatch(data_frame, batchId):
         ApplyMapping_node2 = ApplyMapping.apply(
             frame=KinesisStream_node1,
             mappings=[
-                 ("operationName", "string", "api.operation", "string"), 
-                 ("caller", "string", "actor.user.uid", "string"), 
-                 ("callerIpAddress", "string", "src_endpoint.ip", "string"),
-                 ("identity.claims.name", "string", "actor.user.name", "string"),
                  ("time", "string", "time", "string"), 
-                 ("level", "string", "severity", "string"), 
-                 ("properties.message", "string", "message", "string"),
-                 ("identity.claims.ver", "string", "metadata.product.version", "string"),
+                 ("resourceId", "string", "unmapped.resourceId", "string"), 
+                 ("operationName", "string", "api.operation", "string"), 
                  ("category", "string", "unmapped.category", "string"),
-                 ("identity.authorization.evidence.role", "string", "unmapped.role", "string"),
-                 ("identity.authorization.evidence.principalType", "string", "unmapped.principalType", "string"),
-                 ("location", "string", "unmapped.location", "string"),
-                 ("identity.claims.ver", "string", "cloud.provider", "string"),
+                 ("resultType", "string", "status", "string"), 
+                 ("resultSignature", "string", "unmapped.resultSignature", "string"), 
+                 ("durationMs", "string", "duration", "string"), 
+                 ("callerIpAddress", "string", "src_endpoint.ip", "string"),
+                 ("correlationId", "string", "unmapped.correlationId", "string"), 
+                 ("identity.authorization.scope", "string", "unmapped.identity.authorization.scope", "string"), 
+                 ("identity.authorization.action", "string", "actor.invoked_by", "string"), 
+                 ("identity.authorization.evidence.role", "string", "unmapped.identity.authorization.evidence.role", "string"), 
+                 ("identity.authorization.evidence.roleAssignmentScope", "string", "unmapped.identity.authorization.evidence.roleAssignmentScope", "string"), 
+                 ("identity.authorization.evidence.roleAssignmentId", "string", "unmapped.identity.authorization.evidence.roleAssignmentId", "string"), 
+                 ("identity.authorization.evidence.roleDefinitionId", "string", "unmapped.identity.authorization.evidence.roleDefinitionId", "string"), 
+                 ("identity.authorization.evidence.principalId", "string", "actor.idp.uid", "string"), 
+                 ("identity.authorization.evidence.principalType", "string", "actor.idp.name", "string"), 
+                 ("identity.claims.aud", "string", "unmapped.identity.claims.aud", "string"), 
+                 ("identity.claims.iss", "string", "unmapped.identity.claims.iss", "string"), 
+                 ("identity.claims.iat", "string", "unmapped.identity.claims.iat", "string"), 
+                 ("identity.claims.nbf", "string", "unmapped.identity.claims.nbf", "string"), 
+                 ("identity.claims.exp", "string", "unmapped.identity.claims.exp", "string"), 
+                 ("identity.claims.ver", "string", "unmapped.identity.claims.ver", "string"), 
+                 ("identity.claims.http://schemas.microsoft.com/identity/claims/tenantid", "string", "unmapped.identity.claims.http://schemas.microsoft.com/identity/claims/tenantid", "string"), 
+                 ("identity.claims.http://schemas.microsoft.com/claims/authnmethodsreferences", "string", "unmapped.identity.claims.http://schemas.microsoft.com/claims/authnmethodsreferences", "string"), 
+                 ("identity.claims.http://schemas.microsoft.com/identity/claims/objectidentifier", "string", "unmapped.identity.claims.http://schemas.microsoft.com/identity/claims/objectidentifier", "string"), 
+                 ("identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn", "string", "actor.user.email_addr", "string"), 
+                 ("identity.claims.puid", "string", "unmapped.identity.claims.puid", "string"), 
+                 ("identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", "string", "unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", "string"), 
+                 ("identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname", "string", "unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname", "string"), 
+                 ("identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname", "string", "unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname", "string"), 
+                 ("identity.claims.name", "string", "actor.user.name", "string"), 
+                 ("identity.claims.groups", "string", "actor.user.group.name", "string"), 
+                 ("identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", "string", "unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", "string"), 
+                 ("identity.claims.appid", "string", "unmapped.identity.claims.appid", "string"), 
+                 ("identity.claims.appidacr", "string", "unmapped.identity.claims.appidacr", "string"), 
+                 ("identity.claims.http://schemas.microsoft.com/identity/claims/scope", "string", "unmapped.identity.claims.http://schemas.microsoft.com/identity/claims/scope", "string"), 
+                 ("identity.claims.http://schemas.microsoft.com/claims/authnclassreference", "string", "unmapped.identity.claims.http://schemas.microsoft.com/claims/authnclassreference", "string"), 
+                 ("level", "string", "severity", "string"), 
+                 ("properties.statusCode", "string", "unmapped.properties.statusCode", "string"),
+                 ("properties.serviceRequestId", "string", "unmapped.properties.serviceRequestId", "string"),
+                 ("resourceId", "string", "metadata.product.name", "string"), 
+                 ("resourceId", "string", "cloud.provider", "string"), 
              ],
             transformation_ctx="ApplyMapping_node2",
         )
@@ -126,6 +156,17 @@ def processBatch(data_frame, batchId):
                 return int(0)
             else:
                 return int(99)
+                
+        @udf
+        def MAP_STATID(source):
+            if source == 'Unknown':
+                return int(0)
+            if source == 'Success':
+                return int(1)
+            if source == 'Failure':
+                return int(2)
+            else:
+                return int(99)
            
         @udf
         def MAP_TIME(string):
@@ -144,7 +185,9 @@ def processBatch(data_frame, batchId):
                                                              .withColumn("activity_id", MAP_AI(col('unmapped.category')).cast('integer'))\
                                                              .withColumn("type_uid", MAP_TI(col('unmapped.category')).cast('integer'))\
                                                              .withColumn("time", MAP_TIME(col('time')).cast('integer'))\
+                                                             .withColumn("status_id", MAP_STATID(col('status')).cast('integer'))\
                                                              .withColumn("type_name", MAP_TN(col('unmapped.category')))
+                                                             
 
         azureAuditLog_df = azureAuditLog_df.withColumn(
             "metadata",
@@ -164,6 +207,20 @@ def processBatch(data_frame, batchId):
                 col("metadata.product").withField(
                     "vendor_name",
                     lit("Microsoft")
+                )
+            )
+        )
+        
+        azureAuditLog_df = azureAuditLog_df.withColumn(
+            "actor",
+            col("actor").withField(
+                "user",
+                col("actor.user").withField(
+                    "group",
+                    col("actor.user.group").withField(
+                        "name",
+                        split(col('actor.user.group.name'), ",")
+                    )
                 )
             )
         )
@@ -199,7 +256,6 @@ def processBatch(data_frame, batchId):
         year = now.year
         month = now.month
         day = now.day
-        hour = now.hour
         region = AWS_REGION_NAME
         account_id = AWS_ACCOUNT_ID
 
