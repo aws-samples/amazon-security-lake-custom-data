@@ -74,6 +74,8 @@ Any fields not present in an explicit mapping will be mapped to the unmapped obj
 | -------------------------- | ----------------|
 |`level`|`severity`|
 |`level`|`severity_id`|
+|`resultType`|`status`|
+|`resultType`|`status_id`|
 |`activity_name`|`category`|
 |`activity_id`|`category`|
 |`type_uid`|`category`|
