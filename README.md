@@ -3,7 +3,7 @@
 ### An Azure Event Hub Activity Log Event
 - **Description**: Translates a Azure Eventhub Activity Event to OCSF.
 - **Event References**:
-  - https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log-schema
+  - [https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log-schema](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log-schema#schema-from-storage-account-and-event-hubs:~:text=for%20Policy%20events.-,Schema%20from%20storage%20account%20and%20event%20hubs,-When%20streaming%20the)
 
 
 ### OCSF Version: 1.0.0-rc.2
