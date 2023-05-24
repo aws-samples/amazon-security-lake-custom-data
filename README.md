@@ -55,7 +55,7 @@ Any fields not present in an explicit mapping will be mapped to the unmapped obj
 |`identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname`|`unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname`|
 |`identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname`|`unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname`|
 |`identity.claims.name`|`actor.user.name`|
-|`identity.claims.groups`|`actor.user.group.name`|
+|`identity.claims.groups`|`actor.user.group.name[]`|
 |`identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name`|`unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name`|
 |`identity.claims.appid`|`unmapped.identity.claims.appid`|
 |`identity.claims.appidacr`|`unmapped.identity.claims.appidacr`|
