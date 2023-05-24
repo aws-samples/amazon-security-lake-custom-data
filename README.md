@@ -26,11 +26,11 @@ Any fields not present in an explicit mapping will be mapped to the unmapped obj
 |`time`|`time`|
 |`resourceId`|`unmapped.resourceId`|
 |`operationName`|`api.operation`|
-|`category`|`unmapped.category", "string"),
+|`category`|`unmapped.category`|
 |`resultType`|`status`|
 |`resultSignature`|`unmapped.resultSignature`|
 |`durationMs`|`duration`|
-|`callerIpAddress`|`src_endpoint.ip", "string"),
+|`callerIpAddress`|`src_endpoint.ip`|
 |`correlationId`|`unmapped.correlationId`|
 |`identity.authorization.scope`|`unmapped.identity.authorization.scope`|
 |`identity.authorization.action`|`actor.invoked_by`|
@@ -62,8 +62,8 @@ Any fields not present in an explicit mapping will be mapped to the unmapped obj
 |`identity.claims.http://schemas.microsoft.com/identity/claims/scope`|`unmapped.identity.claims.http://schemas.microsoft.com/identity/claims/scope`|
 |`identity.claims.http://schemas.microsoft.com/claims/authnclassreference`|`unmapped.identity.claims.http://schemas.microsoft.com/claims/authnclassreference`|
 |`level`|`severity`|
-|`properties.statusCode`|`unmapped.properties.statusCode", "string"),
-|`properties.serviceRequestId`|`unmapped.properties.serviceRequestId", "string"),
+|`properties.statusCode`|`unmapped.properties.statusCode`|
+|`properties.serviceRequestId`|`unmapped.properties.serviceRequestId`|
 |`resourceId`|`metadata.product.name`|
 |`resourceId`|`cloud.provider`|
 
