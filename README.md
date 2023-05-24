@@ -145,7 +145,7 @@ Any fields not present in an explicit mapping will be mapped to the unmapped obj
     }
     
     
-# OCSF Transformed Azure Event Hub Policy Event
+# OCSF Normalized Azure Event Hub Policy Event
 
     {
           "time": 1548108866,
