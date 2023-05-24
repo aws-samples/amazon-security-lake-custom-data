@@ -136,12 +136,12 @@ def processBatch(data_frame, batchId):
             if source == 'Action':
                 return int(300503)
 
-# Severity	    Description
-# Critical	    Events that demand the immediate attention of a system administrator. May indicate that an application or system has failed or stopped responding.
-# Error	        Events that indicate a problem, but do not require immediate attention.
-# Warning	    Events that provide forewarning of potential problems, although not an actual error. Indicate that a resource is not in an ideal state and may degrade later into showing errors or critical events.
-# Informational	Events that pass noncritical information to the administrator. Similar to a note that says: "For your information".
-        
+# Severity	        Description
+# Critical	        Events that demand the immediate attention of a system administrator. May indicate that an application or system has failed or stopped responding.
+# Error	            Events that indicate a problem, but do not require immediate attention.
+# Warning	        Events that provide forewarning of potential problems, although not an actual error. Indicate that a resource is not in an ideal state and may degrade later into showing errors or critical events.
+# Informational	E   vents that pass noncritical information to the administrator. Similar to a note that says: "For your information".
+
         @udf
         def MAP_SEVNAME(source):
             if source == 'Information':
