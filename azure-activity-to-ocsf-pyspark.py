@@ -19,10 +19,10 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
 
-AWS_REGION_NAME = ""
-AWS_ACCOUNT_ID = ""
-SECURITY_LAKE_AZURE_STREAM_ARN = ""
-SECURITY_LAKE_BUCKET_NAME = ""
+AWS_REGION_NAME = "us-east-2"
+AWS_ACCOUNT_ID = "087661832257"
+SECURITY_LAKE_AZURE_STREAM_ARN = "arn:aws:kinesis:us-east-2:087661832257:stream/lakestream_10577820"
+SECURITY_LAKE_BUCKET_NAME = "aws-security-data-lake-us-east-2-j3pqdigdmnvgwqgkxqj24zqqgdvpua"
 
 # Script generated for node Kinesis Stream
 dataframe_KinesisStream_node1 = glueContext.create_data_frame.from_options(
@@ -135,28 +135,7 @@ def processBatch(data_frame, batchId):
                 return int(300504)
             if source == 'Action':
                 return int(300503)
-
-# Severity	        Description
-# Critical	        Events that demand the immediate attention of a system administrator. May indicate that an application or system has failed or stopped responding.
-# Error	                Events that indicate a problem, but do not require immediate attention.
-# Warning	        Events that provide forewarning of potential problems, although not an actual error. Indicate that a resource is not in an ideal state and may degrade later into showing errors or critical events.
-# Informational	        Events that pass noncritical information to the administrator. Similar to a note that says: "For your information".
-
-        @udf
-        def MAP_SEVNAME(source):
-            if source == 'Information':
-                return "Informational"
-            if source == 'Informational':
-                return "Informational"
-            if source == 'Error':
-                return "Low"
-            if source == 'Warning':
-                return "Medium"
-            if source == 'Critical':
-                return int(4)
-            else:
-                return int(99)
-            
+        
         @udf
         def MAP_SEVID(source):
             if source == 'Information':
@@ -177,6 +156,17 @@ def processBatch(data_frame, batchId):
                 return int(0)
             else:
                 return int(99)
+  
+        @udf
+        def MAP_STATNAME(source):
+            if source == 'Unknown':
+                return "Unknown"
+            if source == 'Success':
+                return "Success"
+            if source == 'Failure':
+                return "Failure"
+            else:
+                return "Other"
                 
         @udf
         def MAP_STATID(source):
@@ -201,12 +191,12 @@ def processBatch(data_frame, batchId):
                                                              .withColumn("category_uid", lit(3))\
                                                              .withColumn("class_name", lit("API Activity"))\
                                                              .withColumn("class_uid", lit(3005))\
-                                                             .withColumn("severity", MAP_SEVNAME(col('severity')))\
                                                              .withColumn("severity_id", MAP_SEVID(col('severity')).cast('integer'))\
                                                              .withColumn("activity_name", MAP_AN(col('unmapped.category')))\
                                                              .withColumn("activity_id", MAP_AI(col('unmapped.category')).cast('integer'))\
                                                              .withColumn("type_uid", MAP_TI(col('unmapped.category')).cast('integer'))\
                                                              .withColumn("time", MAP_TIME(col('time')).cast('integer'))\
+                                                             .withColumn("status", MAP_STATNAME(col('status'))
                                                              .withColumn("status_id", MAP_STATID(col('status')).cast('integer'))\
                                                              .withColumn("type_name", MAP_TN(col('unmapped.category')))
                                                              
