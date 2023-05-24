@@ -135,7 +135,28 @@ def processBatch(data_frame, batchId):
                 return int(300504)
             if source == 'Action':
                 return int(300503)
+
+# Severity	    Description
+# Critical	    Events that demand the immediate attention of a system administrator. May indicate that an application or system has failed or stopped responding.
+# Error	        Events that indicate a problem, but do not require immediate attention.
+# Warning	    Events that provide forewarning of potential problems, although not an actual error. Indicate that a resource is not in an ideal state and may degrade later into showing errors or critical events.
+# Informational	Events that pass noncritical information to the administrator. Similar to a note that says: "For your information".
         
+        @udf
+        def MAP_SEVNAME(source):
+            if source == 'Information':
+                return "Informational"
+            if source == 'Informational':
+                return "Informational"
+            if source == 'Error':
+                return "Low"
+            if source == 'Warning':
+                return "Medium"
+            if source == 'Critical':
+                return int(4)
+            else:
+                return int(99)
+            
         @udf
         def MAP_SEVID(source):
             if source == 'Information':
@@ -180,6 +201,7 @@ def processBatch(data_frame, batchId):
                                                              .withColumn("category_uid", lit(3))\
                                                              .withColumn("class_name", lit("API Activity"))\
                                                              .withColumn("class_uid", lit(3005))\
+                                                             .withColumn("severity", MAP_SEVNAME(col('severity')))\
                                                              .withColumn("severity_id", MAP_SEVID(col('severity')).cast('integer'))\
                                                              .withColumn("activity_name", MAP_AN(col('unmapped.category')))\
                                                              .withColumn("activity_id", MAP_AI(col('unmapped.category')).cast('integer'))\
