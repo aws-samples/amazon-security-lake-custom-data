@@ -107,7 +107,7 @@ def processBatch(data_frame, batchId):
             if source == 'Delete':
                 return 'Delete'
             if source == 'Action':
-                return 'Update'
+                return 'Unknown'
        
         @udf
         def MAP_AI(source):
@@ -116,7 +116,7 @@ def processBatch(data_frame, batchId):
             if source == 'Delete':
                 return int(4)
             if source == 'Action':
-                return int(3)
+                return int(0)
         
         @udf
         def MAP_TN(source):
@@ -125,7 +125,7 @@ def processBatch(data_frame, batchId):
             if source == 'Delete':
                 return 'API Acitvity: API Activity: Delete'
             if source == 'Action':
-                return 'API Acitvity: API Activity: Update'
+                return 'API Acitvity: API Activity: Unknown'
         
         @udf
         def MAP_TI(source):
@@ -134,7 +134,7 @@ def processBatch(data_frame, batchId):
             if source == 'Delete':
                 return int(300504)
             if source == 'Action':
-                return int(300503)
+                return int(300500)
         
         @udf
         def MAP_SEVID(source):
