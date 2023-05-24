@@ -23,17 +23,49 @@ Any fields not present in an explicit mapping will be mapped to the unmapped obj
 
 | OCSF                       | Raw             |
 | -------------------------- | ----------------|
-|`operationName`|`api.operation`|
-|`caller`|`actor.user.uid`|
-|`callerIpAddress`|`src_endpoint.ip`|
-|`identity.claims.name`|`actor.user.name`|
 |`time`|`time`|
-|`properties.message`|`message`|
-|`identity.claims.ver`|`metadata.product.version`|
-|`category`|`unmapped.category`|
-|`identity.authorization.evidence.role`|`unmapped.role`|
-|`identity.authorization.evidence.principalType`|`unmapped.principalType`|
-|`location`|`unmapped.location`|
+|`resourceId`|`unmapped.resourceId`|
+|`operationName`|`api.operation`|
+|`category`|`unmapped.category", "string"),
+|`resultType`|`status`|
+|`resultSignature`|`unmapped.resultSignature`|
+|`durationMs`|`duration`|
+|`callerIpAddress`|`src_endpoint.ip", "string"),
+|`correlationId`|`unmapped.correlationId`|
+|`identity.authorization.scope`|`unmapped.identity.authorization.scope`|
+|`identity.authorization.action`|`actor.invoked_by`|
+|`identity.authorization.evidence.role`|`unmapped.identity.authorization.evidence.role`|
+|`identity.authorization.evidence.roleAssignmentScope`|`unmapped.identity.authorization.evidence.roleAssignmentScope`|
+|`identity.authorization.evidence.roleAssignmentId`|`unmapped.identity.authorization.evidence.roleAssignmentId`|
+|`identity.authorization.evidence.roleDefinitionId`|`unmapped.identity.authorization.evidence.roleDefinitionId`|
+|`identity.authorization.evidence.principalId`|`actor.idp.uid`|
+|`identity.authorization.evidence.principalType`|`actor.idp.name`|
+|`identity.claims.aud`|`unmapped.identity.claims.aud`|
+|`identity.claims.iss`|`unmapped.identity.claims.iss`|
+|`identity.claims.iat`|`unmapped.identity.claims.iat`|
+|`identity.claims.nbf`|`unmapped.identity.claims.nbf`|
+|`identity.claims.exp`|`unmapped.identity.claims.exp`|
+|`identity.claims.ver`|`unmapped.identity.claims.ver`|
+|`identity.claims.http://schemas.microsoft.com/identity/claims/tenantid`|`unmapped.identity.claims.http://schemas.microsoft.com/identity/claims/tenantid`|
+|`identity.claims.http://schemas.microsoft.com/claims/authnmethodsreferences`|`unmapped.identity.claims.http://schemas.microsoft.com/claims/authnmethodsreferences`|
+|`identity.claims.http://schemas.microsoft.com/identity/claims/objectidentifier`|`unmapped.identity.claims.http://schemas.microsoft.com/identity/claims/objectidentifier`|
+|`identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn`|`actor.user.email_addr`|
+|`identity.claims.puid`|`unmapped.identity.claims.puid`|
+|`identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier`|`unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier`|
+|`identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname`|`unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname`|
+|`identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname`|`unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname`|
+|`identity.claims.name`|`actor.user.name`|
+|`identity.claims.groups`|`actor.user.group.name`|
+|`identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name`|`unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name`|
+|`identity.claims.appid`|`unmapped.identity.claims.appid`|
+|`identity.claims.appidacr`|`unmapped.identity.claims.appidacr`|
+|`identity.claims.http://schemas.microsoft.com/identity/claims/scope`|`unmapped.identity.claims.http://schemas.microsoft.com/identity/claims/scope`|
+|`identity.claims.http://schemas.microsoft.com/claims/authnclassreference`|`unmapped.identity.claims.http://schemas.microsoft.com/claims/authnclassreference`|
+|`level`|`severity`|
+|`properties.statusCode`|`unmapped.properties.statusCode", "string"),
+|`properties.serviceRequestId`|`unmapped.properties.serviceRequestId", "string"),
+|`resourceId`|`metadata.product.name`|
+|`resourceId`|`cloud.provider`|
 
  ### Conditional Mapping:
  - Any fields described within the conditional mappings are subject to dynamic mappings contingent on a conditional evaluation of source data. Fields which fail to meet a particular conditional are assigned a default value from the OCSF schema description.
