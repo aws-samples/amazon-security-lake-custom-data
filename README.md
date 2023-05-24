@@ -83,7 +83,7 @@ Any fields not present in an explicit mapping will be mapped to the unmapped obj
 
 
 
-# Azure Eventhub Source Policy Event
+# Azure Eventhub Policy Event
 
     {
         "records": [
@@ -145,7 +145,7 @@ Any fields not present in an explicit mapping will be mapped to the unmapped obj
     }
     
     
-# OCSF Normalized Azure Event Hub Policy Event
+# OCSF Normalized Azure Eventhub Policy Event
 
     {
           "time": 1548108866,
