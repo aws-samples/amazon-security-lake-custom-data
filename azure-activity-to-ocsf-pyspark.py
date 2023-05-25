@@ -19,10 +19,10 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
 
-AWS_REGION_NAME = "us-east-2"
-AWS_ACCOUNT_ID = "087661832257"
-SECURITY_LAKE_AZURE_STREAM_ARN = "arn:aws:kinesis:us-east-2:087661832257:stream/lakestream_10577820"
-SECURITY_LAKE_BUCKET_NAME = "aws-security-data-lake-us-east-2-j3pqdigdmnvgwqgkxqj24zqqgdvpua"
+AWS_REGION_NAME = ""
+AWS_ACCOUNT_ID = ""
+SECURITY_LAKE_AZURE_STREAM_ARN = ""
+SECURITY_LAKE_BUCKET_NAME = ""
 
 # Script generated for node Kinesis Stream
 dataframe_KinesisStream_node1 = glueContext.create_data_frame.from_options(
