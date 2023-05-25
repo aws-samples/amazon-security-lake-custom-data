@@ -1,4 +1,6 @@
 import sys
+import datetime
+import time
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
@@ -7,9 +9,7 @@ from awsglue.job import Job
 from awsglue.dynamicframe import DynamicFrame
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
-
 from pyspark.sql import DataFrame, Row
-import datetime
 from awsglue import DynamicFrame
 
 args = getResolvedOptions(sys.argv, ["JOB_NAME"])
@@ -19,10 +19,10 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
 
-AWS_REGION_NAME = ""
-AWS_ACCOUNT_ID = ""
-SECURITY-LAKE-AZURE-STREAM-ARN = ""
-SECURITY_LAKE_BUCKET_NAME = ""
+AWS_REGION_NAME = "us-east-2"
+AWS_ACCOUNT_ID = "087661832257"
+SECURITY_LAKE_AZURE_STREAM_ARN = "arn:aws:kinesis:us-east-2:087661832257:stream/lakestream_10577820"
+SECURITY_LAKE_BUCKET_NAME = "aws-security-data-lake-us-east-2-j3pqdigdmnvgwqgkxqj24zqqgdvpua"
 
 # Script generated for node Kinesis Stream
 dataframe_KinesisStream_node1 = glueContext.create_data_frame.from_options(
@@ -47,19 +47,49 @@ def processBatch(data_frame, batchId):
         ApplyMapping_node2 = ApplyMapping.apply(
             frame=KinesisStream_node1,
             mappings=[
-                 ("operationName", "string", "api.operation", "string"), 
-                 ("caller", "string", "actor.user.uid", "string"), 
-                 ("callerIpAddress", "string", "src_endpoint.ip", "string"),
-                 ("identity.claims.name", "string", "actor.user.name", "string"),
                  ("time", "string", "time", "string"), 
-                 ("level", "string", "severity", "string"), 
-                 ("properties.message", "string", "message", "string"),
-                 ("identity.claims.ver", "string", "metadata.version", "string"),
-                 ("identity.claims.ver", "string", "metadata.product.name", "string"),
+                 ("resourceId", "string", "unmapped.resourceId", "string"), 
+                 ("operationName", "string", "api.operation", "string"), 
                  ("category", "string", "unmapped.category", "string"),
-                 ("identity.authorization.evidence.role", "string", "unmapped.role", "string"),
-                 ("identity.authorization.evidence.principalType", "string", "unmapped.principalType", "string"),
-                 ("location", "string", "unmapped.location", "string"),
+                 ("resultType", "string", "status", "string"), 
+                 ("resultSignature", "string", "unmapped.resultSignature", "string"), 
+                 ("durationMs", "string", "duration", "string"), 
+                 ("callerIpAddress", "string", "src_endpoint.ip", "string"),
+                 ("correlationId", "string", "unmapped.correlationId", "string"), 
+                 ("identity.authorization.scope", "string", "unmapped.identity.authorization.scope", "string"), 
+                 ("identity.authorization.action", "string", "actor.invoked_by", "string"), 
+                 ("identity.authorization.evidence.role", "string", "unmapped.identity.authorization.evidence.role", "string"), 
+                 ("identity.authorization.evidence.roleAssignmentScope", "string", "unmapped.identity.authorization.evidence.roleAssignmentScope", "string"), 
+                 ("identity.authorization.evidence.roleAssignmentId", "string", "unmapped.identity.authorization.evidence.roleAssignmentId", "string"), 
+                 ("identity.authorization.evidence.roleDefinitionId", "string", "unmapped.identity.authorization.evidence.roleDefinitionId", "string"), 
+                 ("identity.authorization.evidence.principalId", "string", "actor.idp.uid", "string"), 
+                 ("identity.authorization.evidence.principalType", "string", "actor.idp.name", "string"), 
+                 ("identity.claims.aud", "string", "unmapped.identity.claims.aud", "string"), 
+                 ("identity.claims.iss", "string", "unmapped.identity.claims.iss", "string"), 
+                 ("identity.claims.iat", "string", "unmapped.identity.claims.iat", "string"), 
+                 ("identity.claims.nbf", "string", "unmapped.identity.claims.nbf", "string"), 
+                 ("identity.claims.exp", "string", "unmapped.identity.claims.exp", "string"), 
+                 ("identity.claims.ver", "string", "unmapped.identity.claims.ver", "string"), 
+                 ("identity.claims.http://schemas.microsoft.com/identity/claims/tenantid", "string", "unmapped.identity.claims.http://schemas.microsoft.com/identity/claims/tenantid", "string"), 
+                 ("identity.claims.http://schemas.microsoft.com/claims/authnmethodsreferences", "string", "unmapped.identity.claims.http://schemas.microsoft.com/claims/authnmethodsreferences", "string"), 
+                 ("identity.claims.http://schemas.microsoft.com/identity/claims/objectidentifier", "string", "unmapped.identity.claims.http://schemas.microsoft.com/identity/claims/objectidentifier", "string"), 
+                 ("identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn", "string", "actor.user.email_addr", "string"), 
+                 ("identity.claims.puid", "string", "unmapped.identity.claims.puid", "string"), 
+                 ("identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", "string", "unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", "string"), 
+                 ("identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname", "string", "unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname", "string"), 
+                 ("identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname", "string", "unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname", "string"), 
+                 ("identity.claims.name", "string", "actor.user.name", "string"), 
+                 ("identity.claims.groups", "string", "actor.user.group.name", "string"), 
+                 ("identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", "string", "unmapped.identity.claims.http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", "string"), 
+                 ("identity.claims.appid", "string", "unmapped.identity.claims.appid", "string"), 
+                 ("identity.claims.appidacr", "string", "unmapped.identity.claims.appidacr", "string"), 
+                 ("identity.claims.http://schemas.microsoft.com/identity/claims/scope", "string", "unmapped.identity.claims.http://schemas.microsoft.com/identity/claims/scope", "string"), 
+                 ("identity.claims.http://schemas.microsoft.com/claims/authnclassreference", "string", "unmapped.identity.claims.http://schemas.microsoft.com/claims/authnclassreference", "string"), 
+                 ("level", "string", "severity", "string"), 
+                 ("properties.statusCode", "string", "unmapped.properties.statusCode", "string"),
+                 ("properties.serviceRequestId", "string", "unmapped.properties.serviceRequestId", "string"),
+                 ("resourceId", "string", "metadata.product.name", "string"), 
+                 ("resourceId", "string", "cloud.provider", "string"), 
              ],
             transformation_ctx="ApplyMapping_node2",
         )
@@ -77,7 +107,7 @@ def processBatch(data_frame, batchId):
             if source == 'Delete':
                 return 'Delete'
             if source == 'Action':
-                return 'Update'
+                return 'Unknown'
        
         @udf
         def MAP_AI(source):
@@ -86,7 +116,7 @@ def processBatch(data_frame, batchId):
             if source == 'Delete':
                 return int(4)
             if source == 'Action':
-                return int(3)
+                return int(0)
         
         @udf
         def MAP_TN(source):
@@ -95,7 +125,7 @@ def processBatch(data_frame, batchId):
             if source == 'Delete':
                 return 'API Acitvity: API Activity: Delete'
             if source == 'Action':
-                return 'API Acitvity: API Activity: Update'
+                return 'API Acitvity: API Activity: Unknown'
         
         @udf
         def MAP_TI(source):
@@ -104,7 +134,7 @@ def processBatch(data_frame, batchId):
             if source == 'Delete':
                 return int(300504)
             if source == 'Action':
-                return int(300503)
+                return int(300500)
         
         @udf
         def MAP_SEVID(source):
@@ -126,6 +156,28 @@ def processBatch(data_frame, batchId):
                 return int(0)
             else:
                 return int(99)
+  
+        @udf
+        def MAP_STATNAME(source):
+            if source == 'Unknown':
+                return "Unknown"
+            if source == 'Success':
+                return "Success"
+            if source == 'Failure':
+                return "Failure"
+            else:
+                return "Other"
+                
+        @udf
+        def MAP_STATID(source):
+            if source == 'Unknown':
+                return int(0)
+            if source == 'Success':
+                return int(1)
+            if source == 'Failure':
+                return int(2)
+            else:
+                return int(99)
            
         @udf
         def MAP_TIME(string):
@@ -144,7 +196,10 @@ def processBatch(data_frame, batchId):
                                                              .withColumn("activity_id", MAP_AI(col('unmapped.category')).cast('integer'))\
                                                              .withColumn("type_uid", MAP_TI(col('unmapped.category')).cast('integer'))\
                                                              .withColumn("time", MAP_TIME(col('time')).cast('integer'))\
+                                                             .withColumn("status", MAP_STATNAME(col('status'))
+                                                             .withColumn("status_id", MAP_STATID(col('status')).cast('integer'))\
                                                              .withColumn("type_name", MAP_TN(col('unmapped.category')))
+                                                             
 
         azureAuditLog_df = azureAuditLog_df.withColumn(
             "metadata",
@@ -168,7 +223,44 @@ def processBatch(data_frame, batchId):
             )
         )
         
-        #azureAuditLog_df = azureAuditLog_df.withColumn("time2", col('time').cast('integer'))
+        azureAuditLog_df = azureAuditLog_df.withColumn(
+            "actor",
+            col("actor").withField(
+                "user",
+                col("actor.user").withField(
+                    "group",
+                    col("actor.user.group").withField(
+                        "name",
+                        split(col('actor.user.group.name'), ",")
+                    )
+                )
+            )
+        )
+        
+        azureAuditLog_df = azureAuditLog_df.withColumn(
+            "metadata",
+            col("metadata").withField(
+                "version",
+                lit("1.0.0-rc.2")
+            )
+        )
+        
+        a = ["cloud"]
+        azureAuditLog_df = azureAuditLog_df.withColumn(
+            "metadata",
+            col("metadata").withField(
+                "profiles",
+                array([lit(x) for x in a])
+            )
+        )
+
+        azureAuditLog_df = azureAuditLog_df.withColumn(
+            "cloud",
+            col("cloud").withField(
+                "provider",
+                lit("Microsoft")
+            )
+        )
         
         azureAuditLog_df_dynf = DynamicFrame.fromDF(azureAuditLog_df, glueContext, "dynamic_frame").repartition(1)
         
@@ -176,7 +268,6 @@ def processBatch(data_frame, batchId):
         year = now.year
         month = now.month
         day = now.day
-        hour = now.hour
         region = AWS_REGION_NAME
         account_id = AWS_ACCOUNT_ID
 
