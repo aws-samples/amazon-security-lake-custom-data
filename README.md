@@ -148,87 +148,93 @@ Any fields not present in an explicit mapping will be mapped to the unmapped obj
 # OCSF Normalized Azure Eventhub Policy Event
 
     {
-          "time": 1548108866,
-          "unmapped": {
-                "resourceId": "/subscriptions/s1/resourceGroups/MSSupportGroup/providers/microsoft.support/supporttickets/123456112305841",
-                "category": "Write",
-                "resultSignature": "Succeeded.Created",
-                "correlationId": "c776f9f4-36e5-4e0e-809b-c9b3c3fb62a8",
-                "identity": {
-                      "authorization": {
-                            "scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-001/providers/Microsoft.Storage/storageAccounts/       msftstorageaccount",
-                            "evidence": {
-                                  "role": "Azure Eventhubs Service Role",
-                                  "roleAssignmentScope": "/subscriptions/00000000-0000-0000-0000-000000000000",
-                                  "roleAssignmentId": "123abc2a6c314b0ab03a891259123abc",
-                                  "roleDefinitionId": "123456789de042a6a64b29b123456789"
-                            }
-                      },
-                      "claims": {
-                            "aud": "https://management.core.windows.net/",
-                            "iss": "https://sts.windows.net/abcde123-86f1-41af-91ab-abcde1234567/",
-                            "iat": "1421876371",
-                            "nbf": "1421876371",
-                            "exp": "1421880271",
-                            "ver": "1.0",
-                            "puid": "20030000801A118C",
-                            "appid": "12345678-3bq0-49c1-b47d-974e53cbdf3c",
-                            "appidacr": "2"
-                      }
-                },
-                "properties": {
-                      "statusCode": "Created",
-                      "serviceRequestId": "12345678-8ca0-47ad-9b80-6cde2207f97c"
-                }
-          },
-          "api": {
-                "operation": "microsoft.support/supporttickets/write"
-          },
-          "status": "Success",
-          "src_endpoint": {
-                "ip": "111.111.111.11"
-          },
-          "actor": {
-                "invoked_by": "Microsoft.Storage/storageAccounts/listAccountSas/action",
-                "idp": {
-                      "uid": "abcdef038c6444c18f1c31311fabcdef",
-                      "name": "ServicePrincipal"
-                },
-                "user": {
-                      "name": "John Smith",
-                      "group": {
-                            "name": [
-                                  "12345678-cacfe77c-e058-4712-83qw-f9b08849fd60",
-                                  "12345678-4c41-4b23-99d2-d32ce7aa621c",
-                                  "12345678-0578-4ea0-9gdc-e66cc564d18c"
-                            ]
-                      }
-                }
-          },
-          "severity": "Information",
           "metadata": {
                 "product": {
-                      "name": "Azure",
-                      "vendor_name": "Microsoft"
+                      "version": "1.08",
+                      "name": "CloudTrail",
+                      "vendor_name": "AWS",
+                      "feature": {
+                            "name": "Data"
+                      }
                 },
-                "version": "1.0.0-rc.2",
+                "uid": "330226bc-bdd2-4a6c-b8f3-014598ccf324",
                 "profiles": [
                       "cloud"
-                ]
+                ],
+                "version": "1.0.0-rc.2"
           },
+          "time": 1685039657000,
           "cloud": {
-                "provider": "Microsoft"
+                "region": "us-west-1",
+                "provider": "AWS"
           },
-          "category_name": "Audit Activity",
-          "category_uid": 3,
+          "api": {
+                "response": {},
+                "operation": "PutObject",
+                "service": {
+                      "name": "s3.amazonaws.com"
+                },
+                "request": {
+                      "uid": "SAECTSDBB2JXFMCR"
+                }
+          },
+          "actor": {
+                "user": {
+                      "type": "AWSService"
+                },
+                "session": {},
+                "invoked_by": "securitylake.amazonaws.com",
+                "idp": {}
+          },
+          "http_request": {
+                "user_agent": "securitylake.amazonaws.com"
+          },
+          "src_endpoint": {
+                "uid": "vpce-075fd6c1ec2dfec74",
+                "domain": "securitylake.amazonaws.com"
+          },
+          "resources": [
+                {
+                      "uid": "arn:aws:s3:::aws-security-data-lake-us-west-1-gnwrll7uetmicgovmtbctsigiz1mba/aws/CLOUD_TRAIL_MGMT/1.0/region=us-west-1/accountId=750329923068/eventDay=20230525/48c42a18526e1c4409654c5587e35780.gz.parquet",
+                      "type": "AWS::S3::Object"
+                },
+                {
+                      "uid": "arn:aws:s3:::aws-security-data-lake-us-west-1-gnwrll7uetmicgovmtbctsigiz1mba",
+                      "account_uid": "750329923068",
+                      "type": "AWS::S3::Bucket"
+                }
+          ],
           "class_name": "API Activity",
           "class_uid": 3005,
+          "category_name": "Audit Activity",
+          "category_uid": 3,
           "severity_id": 1,
-          "activity_name": "Create",
-          "activity_id": 1,
-          "type_uid": 300501,
+          "severity": "Informational",
+          "activity_name": "Update",
+          "activity_id": 3,
+          "type_uid": 300503,
+          "type_name": "API Activity: Update",
+          "status": "Success",
           "status_id": 1,
-          "type_name": "API Acitvity: API Activity: Create"
+          "unmapped": {
+                "additionalEventData.SSEApplied": "Default_SSE_S3",
+                "requestParameters.x-amz-acl": "bucket-owner-full-control",
+                "additionalEventData.SignatureVersion": "SigV4",
+                "additionalEventData.CipherSuite": "ECDHE-RSA-AES128-GCM-SHA256",
+                "additionalEventData.bytesTransferredOut": "0",
+                "additionalEventData.x-amz-id-2": "d4dibdVopLguwd2brnipKHEIsfaeWNdCzbgV5NtDIJ9mk486fa1M2vvyBT8qrlwQUt2zYkHQ8TQ=",
+                "readOnly": "false",
+                "eventType": "AwsApiCall",
+                "requestParameters.Host": "aws-security-data-lake-us-west-1-gnwrll7uetmicgovmtbctsigiz1mba.s3.us-west-1.amazonaws.com",
+                "additionalEventData.AuthenticationMethod": "AuthHeader",
+                "sharedEventID": "9b6c31ba-d524-4454-8686-2e1c130ea526",
+                "requestParameters.key": "aws/CLOUD_TRAIL_MGMT/1.0/region=us-west-1/accountId=750329923068/eventDay=20230525/48c42a18526e1c4409654c5587e35780.gz.parquet",
+                "requestParameters.bucketName": "aws-security-data-lake-us-west-1-gnwrll7uetmicgovmtbctsigiz1mba",
+                "responseElements.x-amz-server-side-encryption": "AES256",
+                "recipientAccountId": "750329923068",
+                "managementEvent": "false",
+                "additionalEventData.bytesTransferredIn": "33120"
+          }
     }
 
 
