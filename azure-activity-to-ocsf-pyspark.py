@@ -19,10 +19,10 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
 
-AWS_REGION_NAME = "<region>"
-AWS_ACCOUNT_ID = "<aws-accoundId>"
-SECURITY_LAKE_AZURE_STREAM_ARN = "arn:aws:kinesis:<region>:<aws-accoundId>:stream/<kinesis-stream-name>"
-SECURITY_LAKE_BUCKET_NAME = "aws-security-data-lake-<region>-<lake-bucketId>"
+AWS_REGION_NAME = d
+AWS_ACCOUNT_ID = d
+SECURITY_LAKE_AZURE_STREAM_ARN =d
+SECURITY_LAKE_BUCKET_NAME = "g
 
 # Script generated for node Kinesis Stream
 dataframe_KinesisStream_node1 = glueContext.create_data_frame.from_options(
@@ -32,7 +32,7 @@ dataframe_KinesisStream_node1 = glueContext.create_data_frame.from_options(
         "streamARN": SECURITY_LAKE_AZURE_STREAM_ARN,
         "classification": "json",
         "startingPosition": "earliest",
-        "inferSchema": "true",
+        "inferSchema": "true"
     },
     transformation_ctx="dataframe_KinesisStream_node1",
 )
@@ -287,7 +287,10 @@ def processBatch(data_frame, batchId):
             frame=azureAuditLog_df_dynf,
             connection_type="s3",
             format = "glueparquet",format_options={"compression":"gzip"},
-            connection_options={"path": S3bucket_node3_path, "partitionKeys": []},
+            connection_options={
+                "path": S3bucket_node3_path, 
+                "partitionKeys": []
+            },
             transformation_ctx="S3bucket_node3",
         )
 
