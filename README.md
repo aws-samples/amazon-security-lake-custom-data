@@ -1,5 +1,9 @@
 # Event Dossier: Microsoft Azure Generic Event Hub Cloud Activity
 
+## About this Repo <a name="About"></a>
+
+This repository has been made available as a supplemental resource for the AWS Blogpost - Get custom data into Amazon Security Lake through ingesting Azure activity logs.
+
 ### An Azure Event Hub Activity Log Event
 - **Description**: Translates a Azure Eventhub Activity Event to OCSF.
 - **Event References**:
